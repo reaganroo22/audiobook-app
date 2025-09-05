@@ -1,0 +1,51 @@
+# Environment variables
+.env
+.env.local
+
+# Node modules
+node_modules/
+client/node_modules/
+
+# Build outputs
+client/build/
+dist/
+
+# Generated files
+uploads/
+audio/
+temp/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Database
+*.db
+*.sqlite
+
+# API Keys (backup safety)
+*api_key*
+*API_KEY*
