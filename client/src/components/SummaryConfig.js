@@ -1,0 +1,168 @@
+import React, { useState } from 'react';
+import './SummaryConfig.css';
+
+const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
+  const [localConfig, setLocalConfig] = useState({
+    enablePageSummaries: true,
+    pageInterval: 1,
+    enableFullSummary: true,
+    summaryStyle: 'intelligent', // 'intelligent', 'brief', 'detailed'
+    ...config
+  });
+
+  // Generate intelligent interval options based on page count
+  const getIntervalOptions = () => {
+    const options = [1];
+    if (totalPages >= 2) options.push(2);
+    if (totalPages >= 3) options.push(3);
+    if (totalPages >= 5) options.push(5);
+    if (totalPages >= 10) options.push(10);
+    return options;
+  };
+
+  const handleConfigChange = (key, value) => {
+    const newConfig = { ...localConfig, [key]: value };
+    setLocalConfig(newConfig);
+    onChange(newConfig);
+  };
+
+  return (
+    <div className="summary-config">
+      <div className="config-header">
+        <h3>Summary Configuration</h3>
+        <p>Customize how your audiobook summaries are generated</p>
+      </div>
+
+      <div className="config-section">
+        <div className="config-option">
+          <div className="option-header">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={localConfig.enablePageSummaries}
+                onChange={(e) => handleConfigChange('enablePageSummaries', e.target.checked)}
+                className="config-checkbox"
+              />
+              <div className="checkbox-custom">
+                {localConfig.enablePageSummaries && (
+                  <svg viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                  </svg>
+                )}
+              </div>
+              <span className="option-title">Page-by-page summaries</span>
+            </label>
+            <p className="option-description">
+              Generate intelligent summaries for individual pages or sections
+            </p>
+          </div>
+
+          {localConfig.enablePageSummaries && (
+            <div className="sub-options">
+              <div className="interval-selector">
+                <label className="interval-label">
+                  Summary interval:
+                  <div className="interval-control">
+                    <span>Every</span>
+                    <select
+                      value={localConfig.pageInterval}
+                      onChange={(e) => handleConfigChange('pageInterval', parseInt(e.target.value))}
+                      className="interval-select"
+                    >
+                      {getIntervalOptions().map(option => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                    <span>page{localConfig.pageInterval > 1 ? 's' : ''}</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="config-option">
+          <div className="option-header">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={localConfig.enableFullSummary}
+                onChange={(e) => handleConfigChange('enableFullSummary', e.target.checked)}
+                className="config-checkbox"
+              />
+              <div className="checkbox-custom">
+                {localConfig.enableFullSummary && (
+                  <svg viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                  </svg>
+                )}
+              </div>
+              <span className="option-title">Full document summary</span>
+            </label>
+            <p className="option-description">
+              Generate an overall summary of the entire document
+            </p>
+          </div>
+        </div>
+
+        <div className="config-option">
+          <div className="option-header">
+            <span className="option-title">Summary style</span>
+            <p className="option-description">
+              Choose how detailed you want your summaries to be
+            </p>
+          </div>
+          
+          <div className="style-options">
+            {[
+              { value: 'brief', label: 'Brief', desc: 'Concise key points' },
+              { value: 'intelligent', label: 'Intelligent', desc: 'Balanced detail and clarity' },
+              { value: 'detailed', label: 'Detailed', desc: 'Comprehensive coverage' }
+            ].map((style) => (
+              <label key={style.value} className="radio-option">
+                <input
+                  type="radio"
+                  name="summaryStyle"
+                  value={style.value}
+                  checked={localConfig.summaryStyle === style.value}
+                  onChange={(e) => handleConfigChange('summaryStyle', e.target.value)}
+                  className="radio-input"
+                />
+                <div className="radio-custom">
+                  <div className="radio-dot"></div>
+                </div>
+                <div className="radio-content">
+                  <span className="radio-label">{style.label}</span>
+                  <span className="radio-desc">{style.desc}</span>
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="config-preview">
+        <div className="preview-header">
+          <h4>Configuration Preview</h4>
+        </div>
+        <div className="preview-content">
+          {localConfig.enablePageSummaries && (
+            <div className="preview-item">
+              ✓ Page summaries every {localConfig.pageInterval} page{localConfig.pageInterval > 1 ? 's' : ''}
+            </div>
+          )}
+          {localConfig.enableFullSummary && (
+            <div className="preview-item">
+              ✓ Full document summary
+            </div>
+          )}
+          <div className="preview-item">
+            ✓ {localConfig.summaryStyle.charAt(0).toUpperCase() + localConfig.summaryStyle.slice(1)} style summaries
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SummaryConfig;
