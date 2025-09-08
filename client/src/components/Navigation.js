@@ -20,7 +20,7 @@ const Navigation = ({ onBack, showBack = true }) => {
             <circle cx="33" cy="24" r="3" fill="#FFFFFF" opacity="0.9"/>
             <path d="M33 21v6M30 22.5v3M36 22.5v3" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
-          <span>AudioDocs</span>
+          <span>ReadingStinks.com</span>
         </div>
       </div>
     </nav>

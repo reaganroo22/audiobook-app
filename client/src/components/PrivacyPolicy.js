@@ -122,7 +122,7 @@ const PrivacyPolicy = ({ onBack }) => {
             If you have any questions about this Privacy Policy or our data practices, please contact us at:
           </p>
           <p>
-            Email: privacy@audiodocs.com<br />
+            Email: privacy@readingstinks.com<br />
             Address: [Your Business Address]
           </p>
         </section>

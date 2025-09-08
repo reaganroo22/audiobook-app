@@ -93,7 +93,7 @@ function AppContent() {
             <circle cx="33" cy="24" r="3" fill="#FFFFFF" opacity="0.9"/>
             <path d="M33 21v6M30 22.5v3M36 22.5v3" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
-          <h1>AudioDocs</h1>
+          <h1>ReadingStinks.com</h1>
         </div>
         <div className="user-info">
           <div className="user-avatar">
@@ -156,7 +156,7 @@ function AppContent() {
       <footer className="app-footer">
         <div className="footer-content">
           <div className="footer-left">
-            <span className="footer-logo">AudioDocs</span>
+            <span className="footer-logo">ReadingStinks.com</span>
             <p>Convert PDFs to audio</p>
           </div>
           

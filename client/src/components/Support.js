@@ -209,7 +209,7 @@ const Support = ({ onBack }) => {
               <div className="contact-icon">📧</div>
               <div>
                 <h3>Email</h3>
-                <p>support@audiodocs.com</p>
+                <p>support@readingstinks.com</p>
                 <span>We respond within 24 hours</span>
               </div>
             </div>
