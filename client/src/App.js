@@ -5,6 +5,9 @@ import AuthScreen from './components/Login';
 import Dashboard from './components/Dashboard';
 import MultiFileUpload from './components/MultiFileUpload';
 import AudiobookCreator from './components/AudiobookCreator';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
+import Support from './components/Support';
 import './App.css';
 
 // Main App Content (when authenticated)
@@ -147,6 +150,37 @@ function AppContent() {
           />
         </div>
       )}
+
+      {/* Footer for authenticated users */}
+      <footer className="app-footer">
+        <div className="footer-content">
+          <div className="footer-left">
+            <span className="footer-logo">Audiobook</span>
+            <p>Convert PDFs to audiobooks</p>
+          </div>
+          
+          <div className="footer-links">
+            <button 
+              onClick={() => window.open('/privacy', '_blank')}
+              className="footer-link"
+            >
+              Privacy
+            </button>
+            <button 
+              onClick={() => window.open('/terms', '_blank')}
+              className="footer-link"
+            >
+              Terms
+            </button>
+            <button 
+              onClick={() => window.open('/support', '_blank')}
+              className="footer-link"
+            >
+              Support
+            </button>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
@@ -164,6 +198,21 @@ function App() {
 function AppRouter() {
   const { user, loading } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
+  const [currentPage, setCurrentPage] = useState('landing'); // 'landing', 'auth', 'privacy', 'terms', 'support'
+
+  // Handle URL-based routing
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path === '/privacy') {
+      setCurrentPage('privacy');
+    } else if (path === '/terms') {
+      setCurrentPage('terms');
+    } else if (path === '/support') {
+      setCurrentPage('support');
+    } else {
+      setCurrentPage('landing');
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -177,11 +226,24 @@ function AppRouter() {
     return <AppContent />;
   }
 
+  // Handle legal and support pages
+  if (currentPage === 'privacy') {
+    return <PrivacyPolicy onBack={() => setCurrentPage('landing')} />;
+  }
+
+  if (currentPage === 'terms') {
+    return <TermsOfService onBack={() => setCurrentPage('landing')} />;
+  }
+
+  if (currentPage === 'support') {
+    return <Support onBack={() => setCurrentPage('landing')} />;
+  }
+
   if (showAuth) {
     return <AuthScreen onBack={() => setShowAuth(false)} />;
   }
 
-  return <LandingPage onGetStarted={() => setShowAuth(true)} />;
+  return <LandingPage onGetStarted={() => setShowAuth(true)} onNavigate={setCurrentPage} />;
 }
 
 export default App;

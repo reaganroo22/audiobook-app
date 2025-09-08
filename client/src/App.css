@@ -375,7 +375,8 @@ body {
 }
 
 /* Footer */
-.footer {
+.footer,
+.app-footer {
   padding: 4rem 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   position: relative;
@@ -415,15 +416,21 @@ body {
   gap: 2rem;
 }
 
-.footer-links a {
+.footer-links a,
+.footer-link {
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.875rem;
   font-weight: 300;
   text-decoration: none;
   transition: color 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
-.footer-links a:hover {
+.footer-links a:hover,
+.footer-link:hover {
   color: #ffffff;
 }
 

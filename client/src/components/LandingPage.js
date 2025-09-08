@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const LandingPage = ({ onGetStarted }) => {
+const LandingPage = ({ onGetStarted, onNavigate }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -110,9 +110,24 @@ const LandingPage = ({ onGetStarted }) => {
           </div>
           
           <div className="footer-links">
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
-            <a href="/support">Support</a>
+            <button 
+              onClick={() => onNavigate && onNavigate('privacy')}
+              className="footer-link"
+            >
+              Privacy
+            </button>
+            <button 
+              onClick={() => onNavigate && onNavigate('terms')}
+              className="footer-link"
+            >
+              Terms
+            </button>
+            <button 
+              onClick={() => onNavigate && onNavigate('support')}
+              className="footer-link"
+            >
+              Support
+            </button>
           </div>
         </div>
       </footer>
