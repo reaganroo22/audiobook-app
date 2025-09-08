@@ -3,11 +3,11 @@
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
   z-index: 1000;
   padding: 1rem 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .nav-content {
@@ -19,28 +19,33 @@
 }
 
 .nav-back-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: #f8f9fa;
+  border: 1px solid #d1d5db;
+  color: #374151;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .nav-back-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: #e5e7eb;
+  border-color: #9ca3af;
 }
 
 .nav-logo {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #ffffff;
+  color: #1a1a1a;
   font-weight: 600;
   font-size: 1.1rem;
+}
+
+.nav-logo svg {
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {

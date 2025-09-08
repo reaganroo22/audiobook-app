@@ -1,59 +1,62 @@
 .legal-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  color: #ffffff;
+  background: #ffffff;
+  color: #333333;
   padding: 2rem;
   padding-top: 6rem; /* Account for fixed navigation */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .legal-header {
   max-width: 800px;
   margin: 0 auto 3rem;
   text-align: center;
+  border-bottom: 2px solid #e5e5e5;
+  padding-bottom: 2rem;
 }
 
-
 .legal-header h1 {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 600;
   margin: 0 0 1rem;
-  background: linear-gradient(135deg, #007AFF, #00D9FF);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
 }
 
 .last-updated {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 1rem;
+  color: #666666;
+  font-size: 0.9rem;
   margin: 0;
+  font-style: italic;
 }
 
 .legal-content {
   max-width: 800px;
   margin: 0 auto;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .legal-content section {
-  margin-bottom: 3rem;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 2.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 
 .legal-content h2 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  margin: 0 0 1.5rem;
-  color: #007AFF;
+  margin: 0 0 1rem;
+  color: #1a1a1a;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 0.5rem;
 }
 
 .legal-content p {
-  font-size: 1.1rem;
-  margin: 0 0 1.5rem;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  margin: 0 0 1rem;
+  color: #444444;
+  text-align: justify;
 }
 
 .legal-content ul {
@@ -62,34 +65,31 @@
 }
 
 .legal-content li {
-  font-size: 1.1rem;
-  margin: 0.75rem 0;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: #444444;
 }
 
 .legal-content li::marker {
-  color: #007AFF;
+  color: #666666;
 }
 
 @media (max-width: 768px) {
   .legal-page {
     padding: 1rem;
+    padding-top: 5rem;
   }
   
   .legal-header h1 {
     font-size: 2rem;
   }
   
-  .legal-content section {
-    padding: 1.5rem;
-  }
-  
   .legal-content h2 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
   
   .legal-content p,
   .legal-content li {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 }
