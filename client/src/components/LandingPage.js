@@ -4,6 +4,8 @@ const LandingPage = ({ onGetStarted, onNavigate }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Scroll to top on component mount
+    window.scrollTo(0, 0);
     setTimeout(() => setIsVisible(true), 100);
   }, []);
 
@@ -18,26 +20,15 @@ const LandingPage = ({ onGetStarted, onNavigate }) => {
         <div className="header-content">
           <div className="logo-section">
             <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
-              <defs>
-                <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#1C1C1E"/>
-                  <stop offset="50%" stopColor="#2C2C2E"/>
-                  <stop offset="100%" stopColor="#3A3A3C"/>
-                </linearGradient>
-                <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9"/>
-                  <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.6"/>
-                </linearGradient>
-              </defs>
-              <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" stroke="#FFFFFF" strokeWidth="1"/>
-              <rect x="10" y="18" width="12" height="2" rx="1" fill="url(#waveGradient)"/>
-              <rect x="10" y="22" width="16" height="2" rx="1" fill="url(#waveGradient)"/>
-              <rect x="10" y="26" width="14" height="2" rx="1" fill="url(#waveGradient)"/>
-              <rect x="10" y="30" width="18" height="2" rx="1" fill="url(#waveGradient)"/>
+              <circle cx="24" cy="24" r="22" fill="#1C1C1E" stroke="#FFFFFF" strokeWidth="1"/>
+              <rect x="10" y="18" width="12" height="2" rx="1" fill="#FFFFFF" opacity="0.9"/>
+              <rect x="10" y="22" width="16" height="2" rx="1" fill="#FFFFFF" opacity="0.7"/>
+              <rect x="10" y="26" width="14" height="2" rx="1" fill="#FFFFFF" opacity="0.5"/>
+              <rect x="10" y="30" width="18" height="2" rx="1" fill="#FFFFFF" opacity="0.3"/>
               <circle cx="33" cy="24" r="3" fill="#FFFFFF" opacity="0.9"/>
               <path d="M33 21v6M30 22.5v3M36 22.5v3" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
-            <span className="logo-text">Reading Stinks</span>
+            <span className="logo-text">ReadingStinks.com</span>
           </div>
           <button onClick={onGetStarted} className="header-cta">
             Get Started
@@ -111,7 +102,7 @@ const LandingPage = ({ onGetStarted, onNavigate }) => {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-left">
-            <span className="footer-logo">Reading Stinks</span>
+            <span className="footer-logo">ReadingStinks.com</span>
             <p>Convert PDFs to audio</p>
           </div>
           
