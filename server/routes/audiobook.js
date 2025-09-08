@@ -226,6 +226,9 @@ ${pageData.content}`;
         }
         
       } catch (error) {
+        const pageLabel = pageData.isGroup 
+          ? `pages ${pageData.index + 1}-${pageData.endIndex + 1}`
+          : `page ${pageData.index + 1}`;
         console.error(`❌ Error summarizing ${pageLabel}:`, error.message);
         
         if (pageData.isGroup) {
@@ -313,8 +316,9 @@ ${pages.join('\n\n')}`;
       fs.mkdirSync(audioDir, { recursive: true });
     }
 
-    // OpenAI TTS can handle much larger chunks (up to 4096 chars)
-    const MAX_CHUNK_SIZE = 4000;
+    // Determine chunk size based on AI provider
+    // Deepgram has 2000 char limit, OpenAI has 4096 char limit
+    const MAX_CHUNK_SIZE = aiService.provider === 'deepgram' ? 1800 : 4000; // Leave some buffer
     const chunks = [];
     
     // Split masterScript into chunks
@@ -323,7 +327,7 @@ ${pages.join('\n\n')}`;
     }
     
     jobStatus[jobId].progress = `Creating audio from ${chunks.length} chunks...`;
-    console.log(`🔄 Processing ${chunks.length} audio chunks with OpenAI...`);
+    console.log(`🔄 Processing ${chunks.length} audio chunks (${MAX_CHUNK_SIZE} char max per chunk)...`);
     
     const audioBuffers = [];
     for (let i = 0; i < chunks.length; i++) {
