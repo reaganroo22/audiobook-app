@@ -49,3 +49,7 @@ Thumbs.db
 # API Keys (backup safety)
 *api_key*
 *API_KEY*
+
+# Google OAuth credentials
+client_secret_*.json
+*client_secret*.json
