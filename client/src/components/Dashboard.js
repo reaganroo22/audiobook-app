@@ -97,7 +97,7 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook }) => {
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="header-content">
-          <h1>Audiobook Library</h1>
+          <h1>ReadingStinks.com Library</h1>
           <p>Transform documents into intelligent audio experiences</p>
         </div>
         
@@ -144,7 +144,7 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook }) => {
           <h2>No {filter} audiobooks</h2>
           <p>No audiobooks match the selected filter</p>
           <button className="filter-btn active" onClick={() => setFilter('all')}>
-            Show All Audiobooks
+            Show All Documents
           </button>
         </div>
       ) : (

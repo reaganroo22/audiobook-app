@@ -162,7 +162,7 @@ const TermsOfService = ({ onBack }) => {
             If you have questions about these Terms of Service, please contact us at:
           </p>
           <p>
-            Email: legal@readingsucks.com<br />
+            Email: legal@readingstinks.com<br />
             Address: [Your Business Address]
           </p>
         </section>

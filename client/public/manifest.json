@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "AudioDocs",
+  "name": "AudioDocs - Convert Documents to Audio",
   "icons": [
     {
       "src": "favicon.ico",

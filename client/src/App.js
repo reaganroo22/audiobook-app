@@ -96,7 +96,7 @@ function AppContent() {
               </linearGradient>
             </defs>
           </svg>
-          <h1>Audiobook</h1>
+          <h1>ReadingStinks.com</h1>
         </div>
         <div className="user-info">
           <div className="user-avatar">
@@ -155,7 +155,7 @@ function AppContent() {
       <footer className="app-footer">
         <div className="footer-content">
           <div className="footer-left">
-            <span className="footer-logo">Audiobook</span>
+            <span className="footer-logo">ReadingStinks.com</span>
             <p>Convert PDFs to audiobooks</p>
           </div>
           

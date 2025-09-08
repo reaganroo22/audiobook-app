@@ -138,7 +138,7 @@ const AudioPlayer = ({ pages, summaries, audioFiles, filename, onAudioGenerated 
     <div className="audio-player">
       <div className="audio-header">
         <div className="header-content">
-          <h2>🎧 Audiobook Player</h2>
+          <h2>🎧 Audio Player</h2>
           <div className="header-stats">
             <span className="stat">{pages.length} pages</span>
             <span className="stat">{summaries.filter(s => !s.error).length} summaries</span>

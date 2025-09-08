@@ -240,7 +240,7 @@ const MultiFileUpload = ({ onFilesUpload }) => {
                   <span>Uploading...</span>
                 </>
               ) : (
-                <span>Generate Audiobook from {files.length} Document{files.length > 1 ? 's' : ''}</span>
+                <span>Generate Audio from {files.length} Document{files.length > 1 ? 's' : ''}</span>
               )}
             </button>
             

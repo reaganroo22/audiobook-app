@@ -24,7 +24,7 @@ const Navigation = ({ onBack, showBack = true }) => {
               </linearGradient>
             </defs>
           </svg>
-          <span>Audiobook</span>
+          <span>ReadingStinks.com</span>
         </div>
       </div>
     </nav>
