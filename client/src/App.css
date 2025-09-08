@@ -885,6 +885,18 @@ body {
   font-weight: 400;
 }
 
+.georgetown-badge {
+  font-size: 0.75rem;
+  color: #FFD700;
+  font-weight: 500;
+  background: rgba(255, 215, 0, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  margin-top: 0.25rem;
+  display: inline-block;
+}
+
 .sign-out-btn {
   padding: 0.5rem 0.875rem;
   background: rgba(255, 255, 255, 0.05);

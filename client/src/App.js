@@ -16,7 +16,7 @@ function AppContent() {
   const [uploadedFiles, setUploadedFiles] = useState(null);
   const [summaryConfig, setSummaryConfig] = useState(null);
   const [audiobooks, setAudiobooks] = useState([]);
-  const { user, signOut } = useAuth();
+  const { user, signOut, isGeorgetownStudent } = useAuth();
 
   useEffect(() => {
     // Scroll to top on component mount
@@ -93,7 +93,7 @@ function AppContent() {
             <circle cx="33" cy="24" r="3" fill="#FFFFFF" opacity="0.9"/>
             <path d="M33 21v6M30 22.5v3M36 22.5v3" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
-          <h1>ReadingStinks.com</h1>
+          <h1>AudioDocs</h1>
         </div>
         <div className="user-info">
           <div className="user-avatar">
@@ -108,6 +108,9 @@ function AppContent() {
           <div className="user-details">
             <span className="user-name">{user?.user_metadata?.full_name || 'Student'}</span>
             <span className="user-email">{user?.email}</span>
+            {isGeorgetownStudent && (
+              <span className="georgetown-badge">🎓 Georgetown Student - Free Access</span>
+            )}
           </div>
           <button onClick={signOut} className="sign-out-btn">Sign Out</button>
         </div>
@@ -118,6 +121,7 @@ function AppContent() {
           audiobooks={audiobooks}
           onCreateNew={() => setCurrentView('upload')}
           onUpdateAudiobook={updateAudiobook}
+          isGeorgetownStudent={isGeorgetownStudent}
         />
       )}
       
@@ -152,7 +156,7 @@ function AppContent() {
       <footer className="app-footer">
         <div className="footer-content">
           <div className="footer-left">
-            <span className="footer-logo">ReadingStinks.com</span>
+            <span className="footer-logo">AudioDocs</span>
             <p>Convert PDFs to audio</p>
           </div>
           

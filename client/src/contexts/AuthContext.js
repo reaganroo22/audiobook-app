@@ -3,6 +3,11 @@ import { supabase } from '../config/supabase';
 
 const AuthContext = createContext();
 
+// Utility function to check if user is a Georgetown student
+export const isGeorgetownStudent = (email) => {
+  return email && email.toLowerCase().endsWith('@georgetown.edu');
+};
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -73,7 +78,8 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     signInWithGoogle,
-    signOut
+    signOut,
+    isGeorgetownStudent: isGeorgetownStudent(user?.email)
   };
 
   return (

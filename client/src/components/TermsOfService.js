@@ -162,7 +162,7 @@ const TermsOfService = ({ onBack }) => {
             If you have questions about these Terms of Service, please contact us at:
           </p>
           <p>
-            Email: legal@readingstinks.com<br />
+            Email: legal@audiodocs.com<br />
             Address: [Your Business Address]
           </p>
         </section>

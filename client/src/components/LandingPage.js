@@ -28,7 +28,7 @@ const LandingPage = ({ onGetStarted, onNavigate }) => {
               <circle cx="33" cy="24" r="3" fill="#FFFFFF" opacity="0.9"/>
               <path d="M33 21v6M30 22.5v3M36 22.5v3" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
-            <span className="logo-text">ReadingStinks.com</span>
+            <span className="logo-text">AudioDocs</span>
           </div>
           <button onClick={onGetStarted} className="header-cta">
             Get Started
@@ -88,8 +88,10 @@ const LandingPage = ({ onGetStarted, onNavigate }) => {
           <div className="pricing-card">
             <h2>Simple pricing</h2>
             <p className="price-description">
-              Try your first document completely free.
-              <br/>Then pay only for what you convert.
+              <strong>Free for Georgetown students!</strong>
+              <br/>Use your @georgetown.edu email to get unlimited access.
+              <br/><br/>
+              For everyone else: Try your first document free, then pay per conversion.
             </p>
             <button onClick={onGetStarted} className="pricing-cta">
               Get started free
@@ -102,7 +104,7 @@ const LandingPage = ({ onGetStarted, onNavigate }) => {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-left">
-            <span className="footer-logo">ReadingStinks.com</span>
+            <span className="footer-logo">AudioDocs</span>
             <p>Convert PDFs to audio</p>
           </div>
           

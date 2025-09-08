@@ -34,7 +34,7 @@ const PagePreview = ({ page, index }) => {
   );
 };
 
-const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook }) => {
+const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook, isGeorgetownStudent = false }) => {
   const [selectedAudiobook, setSelectedAudiobook] = useState(null);
   const [editingTitle, setEditingTitle] = useState(null);
   const [tempTitle, setTempTitle] = useState('');
@@ -97,8 +97,13 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook }) => {
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="header-content">
-          <h1>ReadingStinks.com Library</h1>
+          <h1>AudioDocs Library</h1>
           <p>Transform documents into intelligent audio experiences</p>
+          {isGeorgetownStudent && (
+            <div className="georgetown-notice">
+              🎓 <strong>Georgetown Student:</strong> Enjoy unlimited free access to all features!
+            </div>
+          )}
         </div>
         
         <div className="header-actions">
