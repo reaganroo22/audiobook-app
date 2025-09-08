@@ -111,19 +111,19 @@ const LandingPage = ({ onGetStarted, onNavigate }) => {
           
           <div className="footer-links">
             <button 
-              onClick={() => onNavigate && onNavigate('privacy')}
+              onClick={() => window.location.href = '/privacy'}
               className="footer-link"
             >
               Privacy
             </button>
             <button 
-              onClick={() => onNavigate && onNavigate('terms')}
+              onClick={() => window.location.href = '/terms'}
               className="footer-link"
             >
               Terms
             </button>
             <button 
-              onClick={() => onNavigate && onNavigate('support')}
+              onClick={() => window.location.href = '/support'}
               className="footer-link"
             >
               Support

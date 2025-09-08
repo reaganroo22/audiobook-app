@@ -161,19 +161,19 @@ function AppContent() {
           
           <div className="footer-links">
             <button 
-              onClick={() => window.open('/privacy', '_blank')}
+              onClick={() => window.location.href = '/privacy'}
               className="footer-link"
             >
               Privacy
             </button>
             <button 
-              onClick={() => window.open('/terms', '_blank')}
+              onClick={() => window.location.href = '/terms'}
               className="footer-link"
             >
               Terms
             </button>
             <button 
-              onClick={() => window.open('/support', '_blank')}
+              onClick={() => window.location.href = '/support'}
               className="footer-link"
             >
               Support
@@ -202,16 +202,28 @@ function AppRouter() {
 
   // Handle URL-based routing
   useEffect(() => {
-    const path = window.location.pathname;
-    if (path === '/privacy') {
-      setCurrentPage('privacy');
-    } else if (path === '/terms') {
-      setCurrentPage('terms');
-    } else if (path === '/support') {
-      setCurrentPage('support');
-    } else {
-      setCurrentPage('landing');
-    }
+    const handleRouteChange = () => {
+      const path = window.location.pathname;
+      if (path === '/privacy') {
+        setCurrentPage('privacy');
+      } else if (path === '/terms') {
+        setCurrentPage('terms');
+      } else if (path === '/support') {
+        setCurrentPage('support');
+      } else {
+        setCurrentPage('landing');
+      }
+    };
+
+    // Handle initial load
+    handleRouteChange();
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', handleRouteChange);
+    
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+    };
   }, []);
 
   if (loading) {
@@ -228,15 +240,15 @@ function AppRouter() {
 
   // Handle legal and support pages
   if (currentPage === 'privacy') {
-    return <PrivacyPolicy onBack={() => setCurrentPage('landing')} />;
+    return <PrivacyPolicy onBack={() => window.history.back()} />;
   }
 
   if (currentPage === 'terms') {
-    return <TermsOfService onBack={() => setCurrentPage('landing')} />;
+    return <TermsOfService onBack={() => window.history.back()} />;
   }
 
   if (currentPage === 'support') {
-    return <Support onBack={() => setCurrentPage('landing')} />;
+    return <Support onBack={() => window.history.back()} />;
   }
 
   if (showAuth) {
