@@ -97,7 +97,7 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook }) => {
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="header-content">
-          <h1>ReadingStinks.com Library</h1>
+          <h1>Reading Stinks Library</h1>
           <p>Transform documents into intelligent audio experiences</p>
         </div>
         

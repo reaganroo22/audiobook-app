@@ -82,21 +82,27 @@ function AppContent() {
     <div className="App">
       <div className="app-header">
         <div className="header-brand">
-          <svg width="32" height="32" viewBox="0 0 72 72" fill="none" className="header-logo">
-            <rect width="72" height="72" rx="16" fill="url(#headerGradient)"/>
-            <rect x="18" y="20" width="32" height="4" rx="2" fill="rgba(255,255,255,0.8)"/>
-            <rect x="20" y="26" width="28" height="4" rx="2" fill="rgba(255,255,255,0.6)"/>
-            <rect x="22" y="32" width="24" height="4" rx="2" fill="rgba(255,255,255,0.4)"/>
-            <path d="M52 36c0-4-2-7-5-7s-5 3-5 7 2 7 5 7 5-3 5-7z" fill="#00D9FF" opacity="0.8"/>
-            <circle cx="58" cy="14" r="4" fill="#FF3B30"/>
+          <svg width="32" height="32" viewBox="0 0 48 48" fill="none" className="header-logo">
             <defs>
               <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#1C1C1E"/>
-                <stop offset="100%" stopColor="#2C2C2E"/>
+                <stop offset="50%" stopColor="#2C2C2E"/>
+                <stop offset="100%" stopColor="#3A3A3C"/>
+              </linearGradient>
+              <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9"/>
+                <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.6"/>
               </linearGradient>
             </defs>
+            <circle cx="24" cy="24" r="22" fill="url(#headerGradient)" stroke="#FFFFFF" strokeWidth="1"/>
+            <rect x="10" y="18" width="12" height="2" rx="1" fill="url(#waveGradient)"/>
+            <rect x="10" y="22" width="16" height="2" rx="1" fill="url(#waveGradient)"/>
+            <rect x="10" y="26" width="14" height="2" rx="1" fill="url(#waveGradient)"/>
+            <rect x="10" y="30" width="18" height="2" rx="1" fill="url(#waveGradient)"/>
+            <circle cx="33" cy="24" r="3" fill="#FFFFFF" opacity="0.9"/>
+            <path d="M33 21v6M30 22.5v3M36 22.5v3" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
-          <h1>ReadingStinks.com</h1>
+          <h1>Reading Stinks</h1>
         </div>
         <div className="user-info">
           <div className="user-avatar">
@@ -155,7 +161,7 @@ function AppContent() {
       <footer className="app-footer">
         <div className="footer-content">
           <div className="footer-left">
-            <span className="footer-logo">ReadingStinks.com</span>
+            <span className="footer-logo">Reading Stinks</span>
             <p>Convert PDFs to audio</p>
           </div>
           
