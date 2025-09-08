@@ -156,7 +156,7 @@ function AppContent() {
         <div className="footer-content">
           <div className="footer-left">
             <span className="footer-logo">ReadingStinks.com</span>
-            <p>Convert PDFs to audiobooks</p>
+            <p>Convert PDFs to audio</p>
           </div>
           
           <div className="footer-links">
