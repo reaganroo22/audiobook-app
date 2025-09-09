@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 import './FileUpload.css';
 
 const FileUpload = ({ onFileUpload }) => {
@@ -12,7 +13,7 @@ const FileUpload = ({ onFileUpload }) => {
     formData.append('document', file);
 
     try {
-      const response = await axios.post('http://localhost:3001/api/upload', formData, {
+      const response = await axios.post(`${API_BASE_URL}/api/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
