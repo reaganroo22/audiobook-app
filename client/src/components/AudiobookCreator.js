@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import LoadingSpinner from './LoadingSpinner';
+import { API_ENDPOINTS, getAudioUrl } from '../config/api';
 import './AudiobookCreator.css';
 
 const AudiobookCreator = ({ files, summaryConfig = {
@@ -13,6 +14,8 @@ const AudiobookCreator = ({ files, summaryConfig = {
   const [progress, setProgress] = useState('');
   const [audioUrl, setAudioUrl] = useState('');
   const [isComplete, setIsComplete] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [showTimeoutWarning, setShowTimeoutWarning] = useState(false);
 
   // Auto-start creation when component mounts with files
   useEffect(() => {
@@ -26,14 +29,22 @@ const AudiobookCreator = ({ files, summaryConfig = {
     if (!files || files.length === 0) return;
     
     setIsCreating(true);
+    setStartTime(Date.now());
     setProgress('Initializing audiobook creation...');
+    
+    // Show timeout warning after 2 minutes for large files
+    setTimeout(() => {
+      if (isCreating) {
+        setShowTimeoutWarning(true);
+      }
+    }, 120000);
     
     try {
       // Use the first file for now (multi-document support can be added later)
       const filename = files[0].filename;
       
       // Start the audiobook creation job
-      const startResponse = await axios.post('http://localhost:3001/api/audiobook/create', {
+      const startResponse = await axios.post(API_ENDPOINTS.createAudiobook, {
         filename: filename,
         summaryConfig: summaryConfig
       });
@@ -54,7 +65,7 @@ const AudiobookCreator = ({ files, summaryConfig = {
 
   const pollJobStatus = async (jobId) => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/audiobook/status/${jobId}`);
+      const response = await axios.get(API_ENDPOINTS.audiobookStatus(jobId));
       const status = response.data;
       
       setProgress(status.progress || 'Processing...');
@@ -65,7 +76,7 @@ const AudiobookCreator = ({ files, summaryConfig = {
         setProgress('Complete');
         
         // Auto-download the audiobook
-        const downloadUrl = `http://localhost:3001${status.audioUrl}`;
+        const downloadUrl = getAudioUrl(status.audioUrl);
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.download = `audiobook_${Date.now()}.wav`;
@@ -93,8 +104,8 @@ const AudiobookCreator = ({ files, summaryConfig = {
         setProgress(`Error: ${status.error}`);
         setIsCreating(false);
       } else {
-        // Continue polling every 2 seconds
-        setTimeout(() => pollJobStatus(jobId), 2000);
+        // Continue polling every 3 seconds (reduced frequency for long jobs)
+        setTimeout(() => pollJobStatus(jobId), 3000);
       }
     } catch (error) {
       console.error('Status polling error:', error);
@@ -152,13 +163,13 @@ const AudiobookCreator = ({ files, summaryConfig = {
             <audio 
               controls 
               className="audio-player"
-              src={`http://localhost:3001${audioUrl}`}
+              src={getAudioUrl(audioUrl)}
             />
             
             <div className="complete-actions">
               <button 
                 className="download-btn"
-                onClick={() => window.open(`http://localhost:3001${audioUrl}`, '_blank')}
+                onClick={() => window.open(getAudioUrl(audioUrl), '_blank')}
               >
                 Download
               </button>
