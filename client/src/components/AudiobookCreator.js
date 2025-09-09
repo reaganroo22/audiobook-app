@@ -128,6 +128,7 @@ const AudiobookCreator = ({ files, summaryConfig = {
             <LoadingSpinner size="large" color="primary" />
             <h2>Generating audiobook</h2>
             <p className="progress-text">{progress}</p>
+            <p className="tab-hint">Feel free to open a new tab - processing will continue in the background</p>
             <div className="progress-details">
               <div className="progress-step">
                 <span className="step-icon">📄</span>

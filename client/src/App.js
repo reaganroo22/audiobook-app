@@ -9,6 +9,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import Support from './components/Support';
 import './App.css';
+import './HeaderFix.css';
 
 // Main App Content (when authenticated)
 function AppContent() {
@@ -83,6 +84,7 @@ function AppContent() {
   return (
     <div className="App">
       <div className="app-header">
+        <div className="header-spacer"></div>
         <div className="user-info">
           <div className="user-avatar">
             {user?.user_metadata?.avatar_url ? (

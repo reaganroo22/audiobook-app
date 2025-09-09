@@ -1,0 +1,23 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.header-spacer {
+  flex: 1;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tab-hint {
+  color: #888;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  font-style: italic;
+}

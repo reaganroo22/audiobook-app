@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PlayButton from './PlayButton';
+import { getAudioUrl } from '../config/api';
 import './Dashboard.css';
 
 const PagePreview = ({ page, index }) => {
@@ -97,7 +98,7 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook, isGeorgeto
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="header-content">
-          <h1>AudioDoc Library</h1>
+          <h1>Library</h1>
           <p>Transform documents into intelligent audio experiences</p>
           {isGeorgetownStudent && (
             <div className="georgetown-notice">
@@ -248,7 +249,7 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook, isGeorgeto
                   className="play-button-container"
                 >
                   <PlayButton 
-                    audioSrc={`http://localhost:3001${audiobook.audioUrl}`}
+                    audioSrc={getAudioUrl(audiobook.audioUrl)}
                     size="medium"
                     variant="primary"
                   />
@@ -257,7 +258,7 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook, isGeorgeto
                   className="download-btn"
                   onClick={(e) => {
                     e.stopPropagation();
-                    window.open(`http://localhost:3001${audiobook.audioUrl}`, '_blank');
+                    window.open(getAudioUrl(audiobook.audioUrl), '_blank');
                   }}
                 >
                   Download
@@ -326,7 +327,7 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook, isGeorgeto
               <div className="audiobook-player">
                 <audio
                   controls
-                  src={`http://localhost:3001${selectedAudiobook.audioUrl}`}
+                  src={getAudioUrl(selectedAudiobook.audioUrl)}
                   style={{ width: '100%', height: '60px' }}
                 />
               </div>
