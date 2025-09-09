@@ -16,7 +16,6 @@ const AudiobookCreator = ({ files, summaryConfig = {
   const [audioUrl, setAudioUrl] = useState('');
   const [isComplete, setIsComplete] = useState(false);
   const [startTime, setStartTime] = useState(null);
-  const [showTimeoutWarning, setShowTimeoutWarning] = useState(false);
   const [estimatedTime, setEstimatedTime] = useState(15);
   const [currentStep, setCurrentStep] = useState(0);
   const [smartProgress, setSmartProgress] = useState('');
@@ -35,13 +34,6 @@ const AudiobookCreator = ({ files, summaryConfig = {
     setIsCreating(true);
     setStartTime(Date.now());
     setProgress('Initializing audiobook creation...');
-    
-    // Show timeout warning after 2 minutes for large files
-    setTimeout(() => {
-      if (isCreating) {
-        setShowTimeoutWarning(true);
-      }
-    }, 120000);
     
     try {
       // Use the first file for now (multi-document support can be added later)
