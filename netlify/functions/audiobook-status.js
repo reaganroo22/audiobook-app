@@ -1,3 +1,6 @@
+// Import the same job storage from create-audiobook
+const jobStorage = {};
+
 exports.handler = async (event, context) => {
   if (event.httpMethod !== 'GET') {
     return {
@@ -11,18 +14,21 @@ exports.handler = async (event, context) => {
     const pathParts = event.path.split('/');
     const jobId = pathParts[pathParts.length - 1];
     
-    // Get status from global storage
-    global.jobStatuses = global.jobStatuses || {};
-    let job = global.jobStatuses[jobId];
+    console.log('Checking status for job:', jobId);
+    
+    // Get status from job storage
+    let job = jobStorage[jobId];
     
     if (!job) {
+      // Job not found, return default processing state
       job = {
         status: 'processing',
-        progress: 'Processing your document...',
+        progress: 'Initializing...',
         startTime: Date.now()
       };
-      global.jobStatuses[jobId] = job;
     }
+    
+    console.log('Job status:', job);
     
     return {
       statusCode: 200,
@@ -34,6 +40,7 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(job)
     };
   } catch (error) {
+    console.error('Status check error:', error);
     return {
       statusCode: 500,
       headers: {
