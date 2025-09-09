@@ -54,6 +54,7 @@ app.use('/api/llama-parse', llamaParseRouter);
 app.use('/api/chatgpt', geminiSummaryRouter); // Keep same endpoint for compatibility
 app.use('/api/gemini', geminiRouter);
 app.use('/api/audiobook', audiobookRouter);
+app.use('/api/user-audiobooks', require('./routes/user-audiobooks'));
 
 app.use('/audio', express.static(path.join(__dirname, '../audio')));
 

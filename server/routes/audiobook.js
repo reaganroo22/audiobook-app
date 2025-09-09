@@ -188,20 +188,14 @@ async function processAudiobook(filename, jobId, summaryConfig = {
         console.log(`📝 Summarizing ${pageLabel}...`);
         
         const stylePrompts = {
-          brief: 'Create a brief, concise summary focusing only on the most essential points.',
-          intelligent: 'Create a balanced, intelligent summary with clear insights and key takeaways.',
-          detailed: 'Create a comprehensive, detailed summary covering all important aspects and nuances.'
+          brief: 'Create a brief, concise summary focusing only on the most essential points. Write in plain text without any markdown formatting, asterisks, or special characters.',
+          intelligent: 'Create a balanced, intelligent summary with clear insights and key takeaways. Write in plain text without any markdown formatting, asterisks, or special characters.',
+          detailed: 'Create a comprehensive, detailed summary covering all important aspects and nuances. Write in plain text without any markdown formatting, asterisks, or special characters.'
         };
 
         const prompt = `${stylePrompts[summaryStyle]}
 
-${pageData.isGroup ? `**${pageLabel.charAt(0).toUpperCase() + pageLabel.slice(1)} Summary:**` : `**Page ${pageData.index + 1} Summary:**`}
-
-🎯 **Main Point:** [One clear sentence]
-💡 **Key Takeaways:** [2-3 specific insights]
-🧠 **Remember This:** [Most important concept]
-
-Content:
+Content to summarize:
 ${pageData.content}`;
 
         const summary = await aiService.generateSummary(prompt, {
