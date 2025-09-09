@@ -84,7 +84,9 @@ function AppContent() {
   return (
     <div className="App">
       <div className="app-header">
-        <div className="header-spacer"></div>
+        <div className="header-brand">
+          <h1>ReadingStinks.com</h1>
+        </div>
         <div className="user-info">
           <div className="user-avatar">
             {user?.user_metadata?.avatar_url ? (

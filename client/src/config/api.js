@@ -16,6 +16,20 @@ export const API_ENDPOINTS = {
   llamaParse: `${API_BASE_URL}/api/llama-parse/parse`,
 };
 
-export const getAudioUrl = (path) => `${API_BASE_URL}${path}`;
+export const getAudioUrl = (path) => {
+  if (!path) return '';
+  
+  // If it's already a full URL or data URL, return as-is
+  if (path.startsWith('http') || path.startsWith('data:')) {
+    // Replace localhost URLs with Railway URL
+    if (path.includes('localhost:3001')) {
+      return path.replace('http://localhost:3001', API_BASE_URL);
+    }
+    return path;
+  }
+  
+  // If it's a relative path, prepend API base URL
+  return `${API_BASE_URL}${path}`;
+};
 
 export default API_BASE_URL;
