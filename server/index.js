@@ -77,13 +77,10 @@ app.post('/api/upload', upload.single('document'), (req, res) => {
   });
 });
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
-  
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-  });
-}
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'ReadingStinks.com API is running' });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
