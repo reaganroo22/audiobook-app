@@ -93,7 +93,12 @@ async function processAudiobook(filename, jobId, summaryConfig = {
   enablePageSummaries: true,
   pageInterval: 1,
   enableFullSummary: true,
-  summaryStyle: 'intelligent'
+  summaryStyle: 'intelligent',
+  pageRange: 'all',
+  startPage: 1,
+  endPage: null,
+  premiumAudio: false,
+  generateFlashcards: false
 }) {
   try {
     jobStatus[jobId].progress = 'Validating file...';
@@ -139,6 +144,14 @@ async function processAudiobook(filename, jobId, summaryConfig = {
       }
     }
     
+    // Apply page range filtering if specified
+    if (pageRange === 'custom' && startPage && endPage) {
+      const startIndex = Math.max(0, startPage - 1);
+      const endIndex = Math.min(pages.length - 1, endPage - 1);
+      pages = pages.slice(startIndex, endIndex + 1);
+      console.log(`📄 Page range applied: pages ${startPage}-${endPage} (${pages.length} pages selected)`);
+    }
+    
     console.log(`✅ PARSED: ${pages.length} pages`);
     jobStatus[jobId].progress = `Parsed ${pages.length} pages successfully`;
 
@@ -151,7 +164,12 @@ async function processAudiobook(filename, jobId, summaryConfig = {
       enablePageSummaries = true,
       pageInterval = 1,
       enableFullSummary = true,
-      summaryStyle = 'intelligent'
+      summaryStyle = 'intelligent',
+      pageRange = 'all',
+      startPage = 1,
+      endPage = null,
+      premiumAudio = false,
+      generateFlashcards = false
     } = summaryConfig;
 
     const summaries = [];
@@ -329,10 +347,14 @@ ${pages.join('\n\n')}`;
       console.log(`🎤 Generating audio chunk ${i + 1}/${chunks.length} (${chunks[i].length} chars)`);
       
       try {
-        const audioBuffer = await aiService.generateAudio(chunks[i], {
-          voice: "nova",
-          format: "mp3"
-        });
+        // Use premium audio (OpenAI TTS) or standard (Deepgram) based on config
+        const audioOptions = {
+          voice: premiumAudio ? "nova" : "aura-asteria-en",
+          format: "mp3",
+          premium: premiumAudio
+        };
+        
+        const audioBuffer = await aiService.generateAudio(chunks[i], audioOptions);
         
         audioBuffers.push(audioBuffer);
         console.log(`✅ Chunk ${i + 1} audio generated successfully`);
@@ -359,6 +381,26 @@ ${pages.join('\n\n')}`;
 
     console.log('🎉 AUDIOBOOK COMPLETE!');
 
+    // Generate flashcards if enabled
+    let flashcards = [];
+    if (generateFlashcards) {
+      try {
+        jobStatus[jobId].progress = 'Generating flashcards...';
+        console.log('🎯 Generating flashcards from content...');
+        
+        // Combine all summaries for flashcard generation
+        const contentForFlashcards = summaries.filter(s => s && s !== 'No summary generated for this page.').join('\n\n');
+        
+        if (contentForFlashcards.length > 0) {
+          flashcards = await aiService.generateFlashcards(contentForFlashcards, 15);
+          console.log(`✅ Generated ${flashcards.length} flashcards`);
+        }
+      } catch (error) {
+        console.error('❌ Error generating flashcards:', error.message);
+        flashcards = [];
+      }
+    }
+
     // Mark as complete
     jobStatus[jobId].status = 'complete';
     jobStatus[jobId].progress = 'Audiobook ready!';
@@ -369,6 +411,7 @@ ${pages.join('\n\n')}`;
       content: page,
       summary: summaries[index]
     }));
+    jobStatus[jobId].flashcards = flashcards;
     jobStatus[jobId].duration = Math.floor(combinedBuffer.length / 16000); // Estimate duration
 
   } catch (error) {

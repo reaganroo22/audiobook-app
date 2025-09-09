@@ -7,6 +7,11 @@ const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
     pageInterval: 1,
     enableFullSummary: true,
     summaryStyle: 'intelligent', // 'intelligent', 'brief', 'detailed'
+    pageRange: 'all', // 'all' or 'custom'
+    startPage: 1,
+    endPage: totalPages || 10,
+    premiumAudio: false,
+    generateFlashcards: true,
     ...config
   });
 
@@ -141,11 +146,118 @@ const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
         </div>
       </div>
 
+      {/* Page Range Selector */}
+      <div className="config-section">
+        <div className="config-option">
+          <div className="option-header">
+            <span className="option-title">Page Range</span>
+            <p className="option-description">Choose which pages to process</p>
+          </div>
+          <div className="radio-options">
+            <label className="radio-option">
+              <input
+                type="radio"
+                name="pageRange"
+                value="all"
+                checked={localConfig.pageRange === 'all'}
+                onChange={(e) => handleConfigChange('pageRange', e.target.value)}
+                className="radio-input"
+              />
+              <span className="radio-label">All Pages</span>
+            </label>
+            <label className="radio-option">
+              <input
+                type="radio"
+                name="pageRange"
+                value="custom"
+                checked={localConfig.pageRange === 'custom'}
+                onChange={(e) => handleConfigChange('pageRange', e.target.value)}
+                className="radio-input"
+              />
+              <span className="radio-label">Custom Range</span>
+            </label>
+          </div>
+          {localConfig.pageRange === 'custom' && (
+            <div className="page-range-inputs">
+              <label>
+                From page:
+                <input
+                  type="number"
+                  min="1"
+                  max={totalPages}
+                  value={localConfig.startPage}
+                  onChange={(e) => handleConfigChange('startPage', parseInt(e.target.value))}
+                />
+              </label>
+              <label>
+                To page:
+                <input
+                  type="number"
+                  min={localConfig.startPage}
+                  max={totalPages}
+                  value={localConfig.endPage}
+                  onChange={(e) => handleConfigChange('endPage', parseInt(e.target.value))}
+                />
+              </label>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Premium Audio Toggle */}
+      <div className="config-section">
+        <div className="config-option">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={localConfig.premiumAudio}
+              onChange={(e) => handleConfigChange('premiumAudio', e.target.checked)}
+              className="config-checkbox"
+            />
+            <div className="checkbox-custom">
+              {localConfig.premiumAudio && (
+                <svg viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                </svg>
+              )}
+            </div>
+            <span className="option-title">Premium Audio</span>
+          </label>
+          <p className="option-description">Use GPT-4 TTS instead of Deepgram for higher quality voice</p>
+        </div>
+      </div>
+
+      {/* Flashcards Toggle */}
+      <div className="config-section">
+        <div className="config-option">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={localConfig.generateFlashcards}
+              onChange={(e) => handleConfigChange('generateFlashcards', e.target.checked)}
+              className="config-checkbox"
+            />
+            <div className="checkbox-custom">
+              {localConfig.generateFlashcards && (
+                <svg viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                </svg>
+              )}
+            </div>
+            <span className="option-title">Generate Flashcards</span>
+          </label>
+          <p className="option-description">Create study flashcards from the document content</p>
+        </div>
+      </div>
+
       <div className="config-preview">
         <div className="preview-header">
           <h4>Configuration Preview</h4>
         </div>
         <div className="preview-content">
+          <div className="preview-item">
+            ✓ Pages {localConfig.pageRange === 'all' ? 'All' : `${localConfig.startPage}-${localConfig.endPage}`}
+          </div>
           {localConfig.enablePageSummaries && (
             <div className="preview-item">
               ✓ Page summaries every {localConfig.pageInterval} page{localConfig.pageInterval > 1 ? 's' : ''}
@@ -157,8 +269,18 @@ const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
             </div>
           )}
           <div className="preview-item">
-            ✓ {localConfig.summaryStyle.charAt(0).toUpperCase() + localConfig.summaryStyle.slice(1)} style summaries
+            ✓ {localConfig.summaryStyle.charAt(0).toUpperCase() + localConfig.summaryStyle.slice(1)} style summaries (GPT-5)
           </div>
+          {localConfig.premiumAudio && (
+            <div className="preview-item">
+              ✓ Premium audio quality (GPT-4 TTS)
+            </div>
+          )}
+          {localConfig.generateFlashcards && (
+            <div className="preview-item">
+              ✓ Study flashcards included
+            </div>
+          )}
         </div>
       </div>
     </div>

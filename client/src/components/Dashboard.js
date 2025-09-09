@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PlayButton from './PlayButton';
 import { getAudioUrl } from '../config/api';
+import Flashcards from './Flashcards';
+import Quiz from './Quiz';
 import './Dashboard.css';
 
 const PagePreview = ({ page, index }) => {
@@ -40,6 +42,7 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook, isGeorgeto
   const [editingTitle, setEditingTitle] = useState(null);
   const [tempTitle, setTempTitle] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'listened', 'unlistened'
+  const [activeTab, setActiveTab] = useState('content'); // 'content', 'flashcards', 'quiz'
 
   const formatDate = (timestamp) => {
     return new Date(timestamp).toLocaleDateString('en-US', {
@@ -332,44 +335,87 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook, isGeorgeto
                 />
               </div>
               
+              <div className="modal-tabs">
+                <button 
+                  className={`tab-btn ${activeTab === 'content' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('content')}
+                >
+                  Content
+                </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'flashcards' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('flashcards')}
+                >
+                  Flashcards {selectedAudiobook.flashcards?.length ? `(${selectedAudiobook.flashcards.length})` : ''}
+                </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'quiz' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('quiz')}
+                >
+                  Quiz
+                </button>
+              </div>
+              
               <div className="audiobook-details">
-                <div className="detail-section">
-                  <h3>Statistics</h3>
-                  <div className="stats-grid">
-                    <div className="stat-item">
-                      <span className="stat-number">{selectedAudiobook.totalPages}</span>
-                      <span className="stat-text">Pages</span>
+                {activeTab === 'content' && (
+                  <>
+                    <div className="detail-section">
+                      <h3>Statistics</h3>
+                      <div className="stats-grid">
+                        <div className="stat-item">
+                          <span className="stat-number">{selectedAudiobook.totalPages}</span>
+                          <span className="stat-text">Pages</span>
+                        </div>
+                        <div className="stat-item">
+                          <span className="stat-number">{selectedAudiobook.summariesGenerated}</span>
+                          <span className="stat-text">Summaries</span>
+                        </div>
+                        <div className="stat-item">
+                          <span className="stat-number">{Math.ceil(selectedAudiobook.duration / 60)}</span>
+                          <span className="stat-text">Minutes</span>
+                        </div>
+                        {selectedAudiobook.flashcards?.length > 0 && (
+                          <div className="stat-item">
+                            <span className="stat-number">{selectedAudiobook.flashcards.length}</span>
+                            <span className="stat-text">Flashcards</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="stat-item">
-                      <span className="stat-number">{selectedAudiobook.summariesGenerated}</span>
-                      <span className="stat-text">Summaries</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-number">{Math.ceil(selectedAudiobook.duration / 60)}</span>
-                      <span className="stat-text">Minutes</span>
-                    </div>
-                  </div>
-                </div>
 
-                {selectedAudiobook.pages && selectedAudiobook.pages.length > 0 ? (
+                    {selectedAudiobook.pages && selectedAudiobook.pages.length > 0 ? (
+                      <div className="detail-section">
+                        <h3>Content</h3>
+                        <div className="pages-list">
+                          {selectedAudiobook.pages.map((page, index) => (
+                            <PagePreview 
+                              key={index} 
+                              page={page} 
+                              index={index}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="detail-section">
+                        <h3>Content</h3>
+                        <div className="no-content-message">
+                          <p>No content available. This audiobook was created before the content preview feature was added.</p>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+                
+                {activeTab === 'flashcards' && (
                   <div className="detail-section">
-                    <h3>Content</h3>
-                    <div className="pages-list">
-                      {selectedAudiobook.pages.map((page, index) => (
-                        <PagePreview 
-                          key={index} 
-                          page={page} 
-                          index={index}
-                        />
-                      ))}
-                    </div>
+                    <Flashcards flashcards={selectedAudiobook.flashcards || []} />
                   </div>
-                ) : (
+                )}
+                
+                {activeTab === 'quiz' && (
                   <div className="detail-section">
-                    <h3>Content</h3>
-                    <div className="no-content-message">
-                      <p>No content available. This audiobook was created before the content preview feature was added.</p>
-                    </div>
+                    <Quiz flashcards={selectedAudiobook.flashcards || []} />
                   </div>
                 )}
               </div>

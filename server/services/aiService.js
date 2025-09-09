@@ -82,8 +82,15 @@ class AIService {
   async generateAudio(text, options = {}) {
     const voice = options.voice || 'nova';
     const format = options.format || 'mp3';
+    const premium = options.premium || false;
 
     try {
+      // If premium audio is requested, always use OpenAI TTS
+      if (premium) {
+        console.log('🎵 Using premium audio (OpenAI TTS)');
+        return await this.generateAudioOpenAI(text, voice, format);
+      }
+      
       if (this.provider === 'deepgram' && this.deepgramKeys.length > 0) {
         return await this.generateAudioDeepgram(text, voice, format);
       } else if (this.provider === 'vps' && this.vpsConfig) {
@@ -151,10 +158,11 @@ class AIService {
   // OpenAI Implementation
   async generateSummaryOpenAI(prompt, maxTokens, temperature) {
     const response = await this.openai.chat.completions.create({
-      model: process.env.OPENAI_TEXT_MODEL || 'gpt-4o-mini',
+      model: 'gpt-5-mini', // Using GPT-5-mini for optimal cost/performance balance
       messages: [{ role: 'user', content: prompt }],
       max_tokens: maxTokens,
-      temperature: temperature
+      temperature: temperature,
+      reasoning_effort: 'medium' // Balanced reasoning for quality summaries
     });
 
     // Clean markdown formatting from response
@@ -164,6 +172,28 @@ class AIService {
     content = content.replace(/#{1,6}\s/g, ''); // Remove headers
     content = content.replace(/`/g, ''); // Remove code formatting
     return content;
+  }
+
+  // Generate flashcards from content using GPT-5-mini
+  async generateFlashcards(content, count = 10) {
+    const prompt = `Generate ${count} high-quality flashcards from this content. Create challenging but fair questions that test understanding, not just memorization. Format as JSON array with "question" and "answer" fields. No markdown formatting:
+
+Content: ${content}`;
+
+    const response = await this.openai.chat.completions.create({
+      model: 'gpt-5-mini',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 2000,
+      temperature: 0.3,
+      reasoning_effort: 'medium'
+    });
+
+    try {
+      return JSON.parse(response.choices[0].message.content);
+    } catch (error) {
+      console.error('Error parsing flashcards JSON:', error);
+      return [];
+    }
   }
 
   async generateAudioOpenAI(text, voice, format) {
