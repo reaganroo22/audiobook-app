@@ -97,7 +97,7 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook, isGeorgeto
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="header-content">
-          <h1>ReadingStinks.com Library</h1>
+          <h1>AudioDoc Library</h1>
           <p>Transform documents into intelligent audio experiences</p>
           {isGeorgetownStudent && (
             <div className="georgetown-notice">

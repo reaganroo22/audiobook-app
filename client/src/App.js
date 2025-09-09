@@ -83,18 +83,6 @@ function AppContent() {
   return (
     <div className="App">
       <div className="app-header">
-        <div className="header-brand">
-          <svg width="32" height="32" viewBox="0 0 48 48" fill="none" className="header-logo">
-            <circle cx="24" cy="24" r="22" fill="#1C1C1E" stroke="#FFFFFF" strokeWidth="1"/>
-            <rect x="10" y="18" width="12" height="2" rx="1" fill="#FFFFFF" opacity="0.9"/>
-            <rect x="10" y="22" width="16" height="2" rx="1" fill="#FFFFFF" opacity="0.7"/>
-            <rect x="10" y="26" width="14" height="2" rx="1" fill="#FFFFFF" opacity="0.5"/>
-            <rect x="10" y="30" width="18" height="2" rx="1" fill="#FFFFFF" opacity="0.3"/>
-            <circle cx="33" cy="24" r="3" fill="#FFFFFF" opacity="0.9"/>
-            <path d="M33 21v6M30 22.5v3M36 22.5v3" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-          <h1>ReadingStinks.com</h1>
-        </div>
         <div className="user-info">
           <div className="user-avatar">
             {user?.user_metadata?.avatar_url ? (
@@ -152,36 +140,6 @@ function AppContent() {
         </div>
       )}
 
-      {/* Footer for authenticated users */}
-      <footer className="app-footer">
-        <div className="footer-content">
-          <div className="footer-left">
-            <span className="footer-logo">ReadingStinks.com</span>
-            <p>Convert PDFs to audio</p>
-          </div>
-          
-          <div className="footer-links">
-            <button 
-              onClick={() => window.location.href = '/privacy'}
-              className="footer-link"
-            >
-              Privacy
-            </button>
-            <button 
-              onClick={() => window.location.href = '/terms'}
-              className="footer-link"
-            >
-              Terms
-            </button>
-            <button 
-              onClick={() => window.location.href = '/support'}
-              className="footer-link"
-            >
-              Support
-            </button>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

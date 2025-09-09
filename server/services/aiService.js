@@ -157,14 +157,34 @@ class AIService {
       temperature: temperature
     });
 
-    return response.choices[0].message.content;
+    // Clean markdown formatting from response
+    let content = response.choices[0].message.content;
+    content = content.replace(/\*\*/g, ''); // Remove bold markdown
+    content = content.replace(/\*/g, ''); // Remove italic markdown  
+    content = content.replace(/#{1,6}\s/g, ''); // Remove headers
+    content = content.replace(/`/g, ''); // Remove code formatting
+    return content;
   }
 
   async generateAudioOpenAI(text, voice, format) {
+    // Map Deepgram voices to OpenAI voices
+    const voiceMap = {
+      'aura-asteria-en': 'alloy',
+      'aura-luna-en': 'nova',
+      'aura-stella-en': 'shimmer',
+      'aura-athena-en': 'fable',
+      'aura-hera-en': 'onyx',
+      'aura-orion-en': 'echo'
+    };
+    
+    const openaiVoice = voiceMap[voice] || voice || 'alloy';
+    
+    console.log(`🎵 OpenAI TTS: Generating audio with voice "${openaiVoice}"`);
+    
     const response = await this.openai.audio.speech.create({
       model: process.env.OPENAI_TTS_MODEL || 'tts-1-hd',
-      voice: voice,
-      input: text,
+      voice: openaiVoice,
+      input: text.substring(0, 4000), // OpenAI has 4000 char limit
       response_format: format
     });
 
