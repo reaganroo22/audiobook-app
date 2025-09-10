@@ -158,8 +158,6 @@ class AIService {
   // OpenAI Implementation
   async generateSummaryOpenAI(prompt, maxTokens, temperature) {
     try {
-      console.log(`🎯 GPT-5-mini summary request: ${prompt.substring(0, 200)}...`);
-      
       const response = await this.openai.chat.completions.create({
         model: 'gpt-5-mini', // Using GPT-5-mini for optimal cost/performance balance
         messages: [{ role: 'user', content: prompt }],
@@ -168,23 +166,12 @@ class AIService {
         reasoning_effort: 'medium' // minimal, low, medium, high
       });
       
-      console.log(`🎯 GPT-5-mini raw response: ${JSON.stringify(response.choices[0], null, 2)}`);
-      
       // Clean markdown formatting from response
       let content = response.choices[0].message.content;
-      if (!content) {
-        console.error('❌ GPT-5-mini returned null/undefined content!');
-        throw new Error('GPT-5-mini returned empty content');
-      }
-      
-      console.log(`🎯 GPT-5-mini content before cleaning: ${content.substring(0, 200)}...`);
-      
       content = content.replace(/\*\*/g, ''); // Remove bold markdown
       content = content.replace(/\*/g, ''); // Remove italic markdown  
       content = content.replace(/#{1,6}\s/g, ''); // Remove headers
       content = content.replace(/`/g, ''); // Remove code formatting
-      
-      console.log(`🎯 GPT-5-mini final content: length=${content.length}, preview=${content.substring(0, 100)}...`);
       return content;
       
     } catch (error) {
@@ -200,8 +187,6 @@ class AIService {
       });
       
       let content = fallbackResponse.choices[0].message.content;
-      console.log(`🎯 GPT-4 fallback content: length=${content?.length || 0}, preview=${content?.substring(0, 100)}...`);
-      
       content = content.replace(/\*\*/g, '');
       content = content.replace(/\*/g, '');
       content = content.replace(/#{1,6}\s/g, '');
