@@ -139,18 +139,54 @@ const AudiobookCreator = ({ files, summaryConfig = {
             <h2>Generating audiobook</h2>
             <p className="progress-text">{progress}</p>
             <p className="tab-hint">Feel free to open a new tab - processing will continue in the background</p>
+            
+            {/* User Configuration Display */}
+            <div className="configuration-preview">
+              <div className="config-header">
+                <h4>Configuration Preview</h4>
+              </div>
+              <div className="config-content">
+                <div className="config-item">
+                  ✓ Pages {summaryConfig.pageRange === 'all' ? 'All' : `${summaryConfig.startPage}-${summaryConfig.endPage}`}
+                </div>
+                {summaryConfig.enablePageSummaries && (
+                  <div className="config-item">
+                    ✓ Page summaries every {summaryConfig.pageInterval} page{summaryConfig.pageInterval > 1 ? 's' : ''}
+                  </div>
+                )}
+                {summaryConfig.enableFullSummary && (
+                  <div className="config-item">
+                    ✓ Full document summary
+                  </div>
+                )}
+                <div className="config-item">
+                  ✓ {summaryConfig.summaryStyle?.charAt(0).toUpperCase() + summaryConfig.summaryStyle?.slice(1)} style summaries (GPT-5-mini)
+                </div>
+                {summaryConfig.premiumAudio && (
+                  <div className="config-item">
+                    ✓ Premium audio quality (OpenAI TTS)
+                  </div>
+                )}
+                {summaryConfig.generateFlashcards && (
+                  <div className="config-item">
+                    ✓ Study flashcards & quiz included
+                  </div>
+                )}
+              </div>
+            </div>
+            
             <div className="progress-details">
               <div className="progress-step">
                 <span className="step-icon">📄</span>
-                <span>Parsing PDF</span>
+                <span>PARSING PDF</span>
               </div>
               <div className="progress-step">
                 <span className="step-icon">🧠</span>
-                <span>AI Summarization</span>
+                <span>AI SUMMARIZATION</span>
               </div>
               <div className="progress-step">
                 <span className="step-icon">🎵</span>
-                <span>Audio Generation</span>
+                <span>AUDIO GENERATION</span>
               </div>
             </div>
           </div>

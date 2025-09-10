@@ -113,45 +113,154 @@
   letter-spacing: 0.08em;
 }
 
+/* Configuration Preview Section */
+.configuration-preview {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2rem;
+  margin: 2rem 0;
+  backdrop-filter: blur(20px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.configuration-preview .config-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.configuration-preview .config-header h4 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.configuration-preview .config-content {
+  display: grid;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.configuration-preview .config-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  line-height: 1.4;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.configuration-preview .config-item:last-child {
+  border-bottom: none;
+}
+
+.tab-hint {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  margin: 1rem 0 2rem 0;
+  font-weight: 300;
+  text-align: center;
+  font-style: italic;
+}
+
 .progress-details {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  margin-top: 2rem;
-  opacity: 0.7;
+  gap: 3rem;
+  margin-top: 3rem;
+  padding: 1.5rem 0;
 }
 
 .progress-step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
+  gap: 1rem;
+  font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  position: relative;
+}
+
+.progress-step span {
+  text-align: center;
+  max-width: 80px;
+  line-height: 1.2;
 }
 
 .step-icon {
-  font-size: 1.5rem;
-  filter: grayscale(0.5);
-  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  backdrop-filter: blur(10px);
+  position: relative;
 }
 
 .progress-step:hover .step-icon {
-  filter: grayscale(0);
-  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+}
+
+.progress-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 24px;
+  right: -1.5rem;
+  width: 3rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
+  z-index: 0;
 }
 
 @media (max-width: 640px) {
   .progress-details {
-    gap: 1rem;
+    gap: 1.5rem;
+    margin-top: 2rem;
   }
   
   .progress-step {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+  }
+  
+  .progress-step span {
+    max-width: 60px;
   }
   
   .step-icon {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .progress-step:not(:last-child)::after {
+    right: -0.75rem;
+    width: 1.5rem;
+  }
+  
+  .configuration-preview {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .configuration-preview .config-item {
+    font-size: 0.9rem;
   }
 }
 
@@ -311,6 +420,34 @@
 .download-btn span {
   position: relative;
   z-index: 2;
+}
+
+.complete-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.dashboard-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1.25rem 3rem;
+  border-radius: 64px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  backdrop-filter: blur(20px);
+  letter-spacing: 0.02em;
+}
+
+.dashboard-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
 }
 
 /* Responsive */
