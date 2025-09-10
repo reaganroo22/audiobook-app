@@ -91,25 +91,25 @@ class AIService {
         return await this.generateAudioOpenAI(text, voice, format, true);
       }
       
+      // Standard audio should ONLY use Deepgram when premium is disabled
       if (this.provider === 'deepgram' && this.deepgramKeys.length > 0) {
         return await this.generateAudioDeepgram(text, voice, format);
       } else if (this.provider === 'vps' && this.vpsConfig) {
         return await this.generateAudioVPS(text, voice, format);
       } else {
-        return await this.generateAudioOpenAI(text, voice, format);
+        // If no Deepgram available and premium is OFF, throw error instead of fallback
+        throw new Error('Standard audio requires Deepgram. Enable premium audio to use GPT-4o-mini TTS.');
       }
     } catch (error) {
       console.error(`❌ Audio generation failed with ${this.provider}:`, error.message);
       
-      // Fallback logic
-      if (this.provider === 'deepgram' && this.openai) {
-        console.log('🔄 Falling back from Deepgram to OpenAI...');
-        return await this.generateAudioOpenAI(text, voice, format);
-      } else if (this.provider === 'vps' && this.openai) {
-        console.log('🔄 Falling back from VPS to OpenAI...');
-        return await this.generateAudioOpenAI(text, voice, format);
+      // Only fallback to OpenAI if premium audio is enabled
+      if (premium) {
+        console.log('🔄 Premium audio fallback to GPT-4o-mini TTS...');
+        return await this.generateAudioOpenAI(text, voice, format, true);
       }
       
+      // For standard audio, no fallback - throw the original error
       throw error;
     }
   }
