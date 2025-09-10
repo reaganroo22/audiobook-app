@@ -55,8 +55,10 @@ const AudiobookCreator = ({ files, summaryConfig = {
 
   const pollJobStatus = async (jobId) => {
     try {
+      console.log(`🔍 Polling status for job: ${jobId}`);
       const response = await axios.get(API_ENDPOINTS.audiobookStatus(jobId));
       const status = response.data;
+      console.log(`📊 Received status:`, status);
       
       setProgress(status.progress || 'Processing...');
       
@@ -98,8 +100,9 @@ const AudiobookCreator = ({ files, summaryConfig = {
         setTimeout(() => pollJobStatus(jobId), 2000);
       }
     } catch (error) {
-      console.error('Status polling error:', error);
-      setProgress('Error checking status');
+      console.error('❌ Status polling error:', error);
+      console.error('Error details:', error.response?.data);
+      setProgress(`Status check failed: ${error.message}`);
       setIsCreating(false);
     }
   };

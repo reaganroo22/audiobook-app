@@ -76,12 +76,16 @@ router.post('/create', async (req, res) => {
 // Status check endpoint
 router.get('/status/:jobId', (req, res) => {
   const { jobId } = req.params;
+  console.log(`🔍 Status check for job: ${jobId}`);
+  
   const status = jobStatus[jobId];
   
   if (!status) {
+    console.log(`❌ Job ${jobId} not found`);
     return res.status(404).json({ error: 'Job not found' });
   }
   
+  console.log(`📊 Job ${jobId} status:`, JSON.stringify(status, null, 2));
   res.json(status);
 });
 
