@@ -157,21 +157,42 @@ class AIService {
 
   // OpenAI Implementation
   async generateSummaryOpenAI(prompt, maxTokens, temperature) {
-    const response = await this.openai.chat.completions.create({
-      model: 'gpt-5-mini', // Using GPT-5-mini for optimal cost/performance balance
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: maxTokens,
-      temperature: temperature,
-      reasoning_effort: 'medium' // Balanced reasoning for quality summaries
-    });
-
-    // Clean markdown formatting from response
-    let content = response.choices[0].message.content;
-    content = content.replace(/\*\*/g, ''); // Remove bold markdown
-    content = content.replace(/\*/g, ''); // Remove italic markdown  
-    content = content.replace(/#{1,6}\s/g, ''); // Remove headers
-    content = content.replace(/`/g, ''); // Remove code formatting
-    return content;
+    try {
+      const response = await this.openai.chat.completions.create({
+        model: 'gpt-5-mini', // Using GPT-5-mini for optimal cost/performance balance
+        messages: [{ role: 'user', content: prompt }],
+        max_completion_tokens: maxTokens, // GPT-5-mini uses max_completion_tokens instead of max_tokens
+        temperature: temperature,
+        reasoning_effort: 'medium' // minimal, low, medium, high
+      });
+      
+      // Clean markdown formatting from response
+      let content = response.choices[0].message.content;
+      content = content.replace(/\*\*/g, ''); // Remove bold markdown
+      content = content.replace(/\*/g, ''); // Remove italic markdown  
+      content = content.replace(/#{1,6}\s/g, ''); // Remove headers
+      content = content.replace(/`/g, ''); // Remove code formatting
+      return content;
+      
+    } catch (error) {
+      console.error('GPT-5-mini error:', error.message);
+      
+      // Fallback to GPT-4 if GPT-5-mini fails
+      console.log('🔄 Falling back to GPT-4...');
+      const fallbackResponse = await this.openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: maxTokens, // GPT-4 uses max_tokens
+        temperature: temperature
+      });
+      
+      let content = fallbackResponse.choices[0].message.content;
+      content = content.replace(/\*\*/g, '');
+      content = content.replace(/\*/g, '');
+      content = content.replace(/#{1,6}\s/g, '');
+      content = content.replace(/`/g, '');
+      return content;
+    }
   }
 
   // Generate flashcards from content using GPT-5-mini
@@ -180,19 +201,35 @@ class AIService {
 
 Content: ${content}`;
 
-    const response = await this.openai.chat.completions.create({
-      model: 'gpt-5-mini',
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 2000,
-      temperature: 0.3,
-      reasoning_effort: 'medium'
-    });
-
     try {
+      const response = await this.openai.chat.completions.create({
+        model: 'gpt-5-mini',
+        messages: [{ role: 'user', content: prompt }],
+        max_completion_tokens: 2000, // GPT-5-mini uses max_completion_tokens
+        temperature: 0.3,
+        reasoning_effort: 'low' // Use low reasoning for faster flashcard generation
+      });
+
       return JSON.parse(response.choices[0].message.content);
+      
     } catch (error) {
-      console.error('Error parsing flashcards JSON:', error);
-      return [];
+      console.error('GPT-5-mini flashcard error:', error.message);
+      
+      // Fallback to GPT-4 for flashcard generation
+      console.log('🔄 Falling back to GPT-4 for flashcards...');
+      try {
+        const fallbackResponse = await this.openai.chat.completions.create({
+          model: 'gpt-4',
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 2000, // GPT-4 uses max_tokens
+          temperature: 0.3
+        });
+        
+        return JSON.parse(fallbackResponse.choices[0].message.content);
+      } catch (fallbackError) {
+        console.error('Error generating flashcards with fallback:', fallbackError);
+        return [];
+      }
     }
   }
 
