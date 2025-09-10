@@ -1,10 +1,22 @@
 .summary-config {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 2rem;
-  margin: 2rem 0;
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin: 2.5rem 0;
+  backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-config::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
 }
 
 .config-header {
@@ -33,16 +45,36 @@
 
 /* Config Options */
 .config-option {
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.config-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .config-option:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.config-option:hover::before {
+  opacity: 1;
 }
 
 .option-header {
@@ -63,22 +95,41 @@
 }
 
 .checkbox-custom {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   flex-shrink: 0;
   margin-top: 2px;
+  position: relative;
+  backdrop-filter: blur(8px);
+}
+
+.checkbox-custom::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(16, 185, 129, 0.2));
+  border-radius: 7px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
 }
 
 .config-checkbox:checked + .checkbox-custom {
   background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
   border-color: #10b981;
   color: white;
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+}
+
+.config-checkbox:checked + .checkbox-custom::before {
+  opacity: 1;
 }
 
 .checkbox-custom svg {
@@ -108,9 +159,95 @@
 
 /* Sub Options */
 .sub-options {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Flashcard Configuration */
+.flashcard-config {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.flashcard-count-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.flashcard-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.flashcard-select {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 180px;
+}
+
+.flashcard-select:hover,
+.flashcard-select:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(52, 211, 153, 0.4);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1);
+}
+
+.custom-flashcard-count {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.flashcard-count-input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  color: white;
+  font-size: 0.9rem;
+  width: 80px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.flashcard-count-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #34d399;
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.15);
+}
+
+.flashcard-hint {
   margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem;
+  background: rgba(52, 211, 153, 0.08);
+  border-radius: 8px;
+  color: rgba(52, 211, 153, 0.9);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  border: 1px solid rgba(52, 211, 153, 0.15);
 }
 
 .interval-selector {
@@ -135,21 +272,29 @@
 }
 
 .interval-select {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
-  padding: 0.4rem 0.8rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
   color: white;
   font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
 }
 
 .interval-select:hover,
 .interval-select:focus {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(52, 211, 153, 0.4);
   outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1);
 }
 
 /* Radio Button Styling */
@@ -279,32 +424,68 @@
 
 /* Config Preview */
 .config-preview {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background: rgba(52, 211, 153, 0.05);
-  border: 1px solid rgba(52, 211, 153, 0.2);
-  border-radius: 12px;
+  margin-top: 2.5rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.06) 0%, rgba(52, 211, 153, 0.02) 100%);
+  border: 1px solid rgba(52, 211, 153, 0.15);
+  border-radius: 18px;
+  position: relative;
+  backdrop-filter: blur(8px);
+}
+
+.config-preview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.3), transparent);
+}
+
+.preview-header {
+  margin-bottom: 1.5rem;
 }
 
 .preview-header h4 {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
   color: #34d399;
-  margin-bottom: 1rem;
-}
-
-.preview-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.preview-item {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.preview-header h4::before {
+  content: '✨';
+  font-size: 1rem;
+}
+
+.preview-content {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.preview-item {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.preview-item::before {
+  content: '✓';
+  color: #34d399;
+  font-weight: 700;
+  font-size: 0.9rem;
+  width: 16px;
+  text-align: center;
 }
 
 /* Responsive */
