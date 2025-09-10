@@ -21,13 +21,16 @@ const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
   React.useEffect(() => {
     if (totalPages && totalPages > 0) {
       const newEndPage = Math.max(totalPages, 1);
-      if (newEndPage !== localConfig.endPage) {
-        const newConfig = { ...localConfig, endPage: newEndPage };
-        setLocalConfig(newConfig);
-        onChange(newConfig);
-      }
+      setLocalConfig(prevConfig => {
+        if (newEndPage !== prevConfig.endPage) {
+          const newConfig = { ...prevConfig, endPage: newEndPage };
+          onChange(newConfig);
+          return newConfig;
+        }
+        return prevConfig;
+      });
     }
-  }, [totalPages, localConfig.endPage, onChange]);
+  }, [totalPages, onChange]);
 
   // Generate intelligent interval options based on page count
   const getIntervalOptions = () => {
