@@ -85,10 +85,10 @@ class AIService {
     const premium = options.premium || false;
 
     try {
-      // If premium audio is requested, always use OpenAI TTS
+      // If premium audio is requested, always use GPT-4o-mini TTS
       if (premium) {
-        console.log('🎵 Using premium audio (OpenAI TTS)');
-        return await this.generateAudioOpenAI(text, voice, format);
+        console.log('🎵 Using premium audio (GPT-4o-mini TTS)');
+        return await this.generateAudioOpenAI(text, voice, format, true);
       }
       
       if (this.provider === 'deepgram' && this.deepgramKeys.length > 0) {
@@ -233,7 +233,7 @@ Content: ${content}`;
     }
   }
 
-  async generateAudioOpenAI(text, voice, format) {
+  async generateAudioOpenAI(text, voice, format, premium = false) {
     // Map Deepgram voices to OpenAI voices
     const voiceMap = {
       'aura-asteria-en': 'alloy',
@@ -248,8 +248,13 @@ Content: ${content}`;
     
     console.log(`🎵 OpenAI TTS: Generating audio with voice "${openaiVoice}"`);
     
+    // Use GPT-4o-mini TTS for premium audio, standard tts-1-hd for regular  
+    const ttsModel = premium ? 'gpt-4o-audio-preview' : (process.env.OPENAI_TTS_MODEL || 'tts-1-hd');
+    
+    console.log(`🎵 Using ${premium ? 'Premium GPT-4o-mini' : 'Standard'} TTS model: ${ttsModel}`);
+    
     const response = await this.openai.audio.speech.create({
-      model: process.env.OPENAI_TTS_MODEL || 'tts-1-hd',
+      model: ttsModel,
       voice: openaiVoice,
       input: text.substring(0, 4000), // OpenAI has 4000 char limit
       response_format: format
