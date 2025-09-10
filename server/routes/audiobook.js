@@ -191,7 +191,7 @@ async function processAudiobook(filename, jobId, summaryConfig = {
     jobStatus[jobId].progress = 'Generating AI summaries...';
     console.log('🧠 STEP 2: Generating summaries...');
 
-    const summaries = [];
+    const summaries = {};
     let pagesToSummarize = [];
     
     // Determine which pages to summarize based on configuration
@@ -407,8 +407,14 @@ ${pages.join('\n\n')}`;
         jobStatus[jobId].progress = 'Generating flashcards...';
         console.log('🎯 Generating flashcards from content...');
         
-        // Combine all summaries for flashcard generation
-        const contentForFlashcards = summaries.filter(s => s && s !== 'No summary generated for this page.').join('\n\n');
+        // Combine all page summaries for flashcard generation (excluding fullDocument)
+        const pageSummaries = [];
+        for (let i = 0; i < pages.length; i++) {
+          if (summaries[i] && summaries[i] !== 'No summary generated for this page.') {
+            pageSummaries.push(summaries[i]);
+          }
+        }
+        const contentForFlashcards = pageSummaries.join('\n\n');
         
         if (contentForFlashcards.length > 0) {
           flashcards = await aiService.generateFlashcards(contentForFlashcards, 15);
@@ -425,7 +431,7 @@ ${pages.join('\n\n')}`;
     jobStatus[jobId].progress = 'Audiobook ready!';
     jobStatus[jobId].audioUrl = `/audio/${audioFilename}`;
     jobStatus[jobId].totalPages = pages.length;
-    jobStatus[jobId].summariesGenerated = summaries.length;
+    jobStatus[jobId].summariesGenerated = Object.keys(summaries).filter(key => key !== 'fullDocument').length;
     jobStatus[jobId].pages = pages.map((page, index) => ({
       content: page,
       summary: summaries[index]
