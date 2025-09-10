@@ -9,9 +9,11 @@ const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
     summaryStyle: 'intelligent', // 'intelligent', 'brief', 'detailed'
     pageRange: 'all', // 'all' or 'custom'
     startPage: 1,
-    endPage: totalPages || 10,
+    endPage: Math.max(totalPages, 10),
     premiumAudio: false,
     generateFlashcards: true,
+    flashcardCount: 'auto', // 'auto' or number
+    customFlashcardCount: 15,
     ...config
   });
 
@@ -22,6 +24,9 @@ const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
     if (totalPages >= 3) options.push(3);
     if (totalPages >= 5) options.push(5);
     if (totalPages >= 10) options.push(10);
+    if (totalPages >= 20) options.push(20);
+    if (totalPages >= 50) options.push(50);
+    options.push('custom');
     return options;
   };
 
@@ -145,17 +150,41 @@ const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
                   <div className="interval-control">
                     <span>Every</span>
                     <select
-                      value={localConfig.pageInterval}
-                      onChange={(e) => handleConfigChange('pageInterval', parseInt(e.target.value))}
+                      value={localConfig.pageInterval === 'custom' ? 'custom' : localConfig.pageInterval}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === 'custom') {
+                          handleConfigChange('pageInterval', 'custom');
+                        } else {
+                          handleConfigChange('pageInterval', parseInt(value));
+                        }
+                      }}
                       className="interval-select"
                     >
                       {getIntervalOptions().map(option => (
-                        <option key={option} value={option}>{option}</option>
+                        <option key={option} value={option}>
+                          {option === 'custom' ? 'Custom' : option}
+                        </option>
                       ))}
                     </select>
-                    <span>page{localConfig.pageInterval > 1 ? 's' : ''}</span>
+                    <span>page{typeof localConfig.pageInterval === 'number' && localConfig.pageInterval > 1 ? 's' : ''}</span>
                   </div>
                 </label>
+                
+                {localConfig.pageInterval === 'custom' && (
+                  <div className="custom-interval">
+                    <input
+                      type="number"
+                      min="1"
+                      max={totalPages}
+                      value={localConfig.customPageInterval || 1}
+                      onChange={(e) => handleConfigChange('customPageInterval', parseInt(e.target.value))}
+                      className="custom-interval-input"
+                      placeholder="Pages"
+                    />
+                    <span>pages per summary</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -269,6 +298,48 @@ const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
               Create study flashcards and quiz questions from the content
             </p>
           </div>
+          
+          {localConfig.generateFlashcards && (
+            <div className="sub-options">
+              <div className="flashcard-config">
+                <label className="flashcard-count-label">
+                  Number of flashcards:
+                  <div className="flashcard-control">
+                    <select
+                      value={localConfig.flashcardCount}
+                      onChange={(e) => handleConfigChange('flashcardCount', e.target.value)}
+                      className="flashcard-select"
+                    >
+                      <option value="auto">Auto (AI decides)</option>
+                      <option value="custom">Custom amount</option>
+                    </select>
+                  </div>
+                </label>
+                
+                {localConfig.flashcardCount === 'custom' && (
+                  <div className="custom-flashcard-count">
+                    <input
+                      type="number"
+                      min="5"
+                      max="200"
+                      value={localConfig.customFlashcardCount}
+                      onChange={(e) => handleConfigChange('customFlashcardCount', parseInt(e.target.value))}
+                      className="flashcard-count-input"
+                      placeholder="Number of flashcards"
+                    />
+                    <span>flashcards (5-200)</span>
+                  </div>
+                )}
+                
+                <div className="flashcard-hint">
+                  {localConfig.flashcardCount === 'auto' ? 
+                    '📚 AI will determine optimal count based on content length' :
+                    `📚 Will generate ${localConfig.customFlashcardCount} flashcards from your document`
+                  }
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

@@ -421,8 +421,14 @@ ${pages.join('\n\n')}`;
         console.log(`📊 Flashcard generation: Using ${pages.length} pages, total content length: ${textForFlashcards.length}`);
         
         if (textForFlashcards.length > 0) {
+          // Determine flashcard count from config
+          const flashcardCount = summaryConfig.flashcardCount === 'custom' 
+            ? summaryConfig.customFlashcardCount 
+            : null; // null means auto-determine
+          
+          console.log(`🎯 Flashcard count: ${flashcardCount || 'auto-determined'}`);
           console.log('🎯 Starting flashcard generation with original text...');
-          flashcards = await aiService.generateFlashcards(textForFlashcards, 15);
+          flashcards = await aiService.generateFlashcards(textForFlashcards, flashcardCount);
           console.log(`✅ Generated ${flashcards.length} flashcards from original text`);
         }
       } catch (error) {

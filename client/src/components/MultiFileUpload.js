@@ -228,8 +228,8 @@ const MultiFileUpload = ({ onFilesUpload }) => {
               config={summaryConfig}
               onChange={setSummaryConfig}
               totalPages={files.reduce((total, file) => {
-                // Rough estimate: 1 page per 50KB for PDFs
-                return total + Math.max(1, Math.ceil(file.size / 50000));
+                // Better estimate: 1 page per 25KB for PDFs (more conservative)
+                return total + Math.max(1, Math.ceil(file.size / 25000));
               }, 0)}
             />
           )}

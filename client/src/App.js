@@ -30,6 +30,10 @@ function AppContent() {
   }, []);
 
   const saveAudiobook = (audiobookData) => {
+    console.log('🐛 SAVE DEBUG - Received audiobookData:', JSON.stringify(audiobookData, null, 2));
+    console.log('🐛 SAVE DEBUG - Flashcards:', audiobookData.flashcards);
+    console.log('🐛 SAVE DEBUG - Flashcards length:', audiobookData.flashcards?.length);
+    
     const newAudiobook = {
       id: Date.now(),
       title: audiobookData.originalname || `Audiobook ${Date.now()}`,
@@ -39,8 +43,12 @@ function AppContent() {
       duration: audiobookData.duration || 300,
       audioUrl: audiobookData.audioUrl,
       pages: audiobookData.pages || [],
+      flashcards: audiobookData.flashcards || [],
+      fullDocumentSummary: audiobookData.fullDocumentSummary || null,
       listened: false
     };
+    
+    console.log('🐛 SAVE DEBUG - Final newAudiobook:', JSON.stringify(newAudiobook, null, 2));
 
     const updatedAudiobooks = [...audiobooks, newAudiobook];
     setAudiobooks(updatedAudiobooks);

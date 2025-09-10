@@ -54,7 +54,7 @@ class AIService {
 
   // Generate text summary using configured provider
   async generateSummary(prompt, options = {}) {
-    const maxTokens = options.maxTokens || 300;
+    const maxTokens = options.maxTokens || 1000; // Increased from 300 to 1000 for GPT-5-mini
     const temperature = options.temperature || 0.7;
 
     try {
@@ -196,8 +196,13 @@ class AIService {
   }
 
   // Generate flashcards from content using GPT-5-mini
-  async generateFlashcards(content, count = 10) {
-    const prompt = `Generate exactly ${count} high-quality flashcards from this content. Create challenging but fair questions that test comprehension, analysis, and key concepts.
+  async generateFlashcards(content, count = null) {
+    // Let AI determine optimal count based on content length
+    const contentLength = content.length;
+    const suggestedCount = Math.max(5, Math.min(20, Math.floor(contentLength / 500))); // 1 card per 500 chars, 5-20 range
+    const finalCount = count || suggestedCount;
+    
+    const prompt = `Analyze this content and generate ${finalCount} high-quality flashcards. Create challenging but fair questions that test comprehension, analysis, and key concepts. Adjust the number if the content warrants more or fewer flashcards for optimal learning.
 
 IMPORTANT: Respond with ONLY a valid JSON array. No explanations, no markdown, no text before or after. Just the JSON array.
 
@@ -210,7 +215,7 @@ ${content.substring(0, 8000)}`; // Limit content to avoid token limits
       const response = await this.openai.chat.completions.create({
         model: 'gpt-5-mini',
         messages: [{ role: 'user', content: prompt }],
-        max_completion_tokens: 2000,
+        max_completion_tokens: 3000, // Increased for flashcard generation
         reasoning_effort: 'low'
       });
 

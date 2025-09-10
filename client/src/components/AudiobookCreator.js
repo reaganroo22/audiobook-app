@@ -64,6 +64,8 @@ const AudiobookCreator = ({ files, summaryConfig = {
       const response = await axios.get(API_ENDPOINTS.audiobookStatus(jobId));
       const status = response.data;
       console.log(`📊 Received status:`, status);
+      console.log(`🐛 Status flashcards:`, status.flashcards);
+      console.log(`🐛 Status flashcards length:`, status.flashcards?.length);
       
       setProgress(status.progress || 'Processing...');
       
@@ -72,16 +74,13 @@ const AudiobookCreator = ({ files, summaryConfig = {
         setIsComplete(true);
         setProgress('Complete');
         
-        // Auto-download the audiobook
-        const downloadUrl = getAudioUrl(status.audioUrl);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = `audiobook_${Date.now()}.mp3`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Auto-download removed - users can download from the Dashboard if needed
         
         // Prepare data for parent callback
+        console.log('🐛 DEBUGGING - Full status object:', JSON.stringify(status, null, 2));
+        console.log('🐛 DEBUGGING - Flashcards from status:', status.flashcards);
+        console.log('🐛 DEBUGGING - Flashcards length:', status.flashcards?.length);
+        
         const audiobookData = {
           originalname: files[0].originalname,
           totalPages: status.totalPages || 1,
@@ -92,6 +91,8 @@ const AudiobookCreator = ({ files, summaryConfig = {
           fullDocumentSummary: status.fullDocumentSummary || null,
           flashcards: status.flashcards || []
         };
+        
+        console.log('🐛 DEBUGGING - Final audiobookData:', JSON.stringify(audiobookData, null, 2));
         
         // Call parent callback if provided
         if (onComplete) {
