@@ -28,9 +28,23 @@ const jobStatus = {};
 // SINGLE ENDPOINT: PDF → Complete Audiobook
 router.post('/create', async (req, res) => {
   console.log('🚀 AUDIOBOOK CREATION STARTED');
+  console.log('📋 Request body:', JSON.stringify(req.body, null, 2));
+  console.log('📋 Headers:', req.headers);
   
   try {
     const { filename, summaryConfig = {} } = req.body;
+    
+    if (!filename) {
+      console.error('❌ No filename provided in request');
+      return res.status(400).json({ 
+        error: 'Filename is required',
+        received: req.body 
+      });
+    }
+    
+    console.log('📁 Processing file:', filename);
+    console.log('⚙️ Summary config:', JSON.stringify(summaryConfig, null, 2));
+    
     const jobId = `job_${Date.now()}`;
     
     // Initialize job status
