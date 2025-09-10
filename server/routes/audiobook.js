@@ -166,14 +166,7 @@ async function processAudiobook(filename, jobId, summaryConfig = {
       console.log(`📄 Page range applied: pages ${startPage}-${endPage} (${pages.length} pages selected)`);
     }
     
-    console.log(`✅ PARSED: ${pages.length} pages`);
-    jobStatus[jobId].progress = `Parsed ${pages.length} pages successfully`;
-
-    // STEP 2: Generate Summaries Based on Configuration
-    jobStatus[jobId].status = 'summarizing';
-    jobStatus[jobId].progress = 'Generating AI summaries...';
-    console.log('🧠 STEP 2: Generating summaries...');
-    
+    // Extract config values before using them
     const {
       enablePageSummaries = true,
       pageInterval = 1,
@@ -185,6 +178,14 @@ async function processAudiobook(filename, jobId, summaryConfig = {
       premiumAudio = false,
       generateFlashcards = false
     } = summaryConfig;
+    
+    console.log(`✅ PARSED: ${pages.length} pages`);
+    jobStatus[jobId].progress = `Parsed ${pages.length} pages successfully`;
+
+    // STEP 2: Generate Summaries Based on Configuration
+    jobStatus[jobId].status = 'summarizing';
+    jobStatus[jobId].progress = 'Generating AI summaries...';
+    console.log('🧠 STEP 2: Generating summaries...');
 
     const summaries = [];
     let pagesToSummarize = [];
