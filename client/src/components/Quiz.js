@@ -59,8 +59,30 @@ const Quiz = ({ flashcards = [] }) => {
       ? multipleChoiceQuestions[currentQuestion]
       : flashcards[currentQuestion];
     
-    const isCorrect = selectedAnswer.toLowerCase().trim() === currentCard.correctAnswer.toLowerCase().trim() ||
-                     selectedAnswer.toLowerCase().includes(currentCard.answer.toLowerCase().trim());
+    let isCorrect = false;
+    
+    if (quizMode === 'multiple-choice') {
+      isCorrect = selectedAnswer.toLowerCase().trim() === currentCard.correctAnswer.toLowerCase().trim();
+    } else {
+      // For open-ended, be more flexible with matching
+      const userAnswer = selectedAnswer.toLowerCase().trim();
+      const correctAnswer = currentCard.answer.toLowerCase().trim();
+      
+      // Check if user answer contains key words from correct answer or vice versa
+      const userWords = userAnswer.split(/\s+/).filter(word => word.length > 3);
+      const correctWords = correctAnswer.split(/\s+/).filter(word => word.length > 3);
+      
+      // If user answer is very short, require exact match
+      if (userAnswer.length < 20) {
+        isCorrect = correctAnswer.includes(userAnswer) || userAnswer.includes(correctAnswer);
+      } else {
+        // For longer answers, check if they share significant words
+        const commonWords = userWords.filter(word => correctWords.some(cWord => 
+          cWord.includes(word) || word.includes(cWord)
+        ));
+        isCorrect = commonWords.length >= Math.min(3, Math.floor(correctWords.length * 0.3));
+      }
+    }
     
     if (isCorrect) {
       setScore(score + 1);
@@ -217,15 +239,15 @@ const Quiz = ({ flashcards = [] }) => {
 
       {showResult && (
         <div className="quiz-result">
-          <div className={`result-indicator ${selectedAnswer.toLowerCase().trim() === currentCard.correctAnswer?.toLowerCase().trim() || selectedAnswer.toLowerCase().includes(currentCard.answer?.toLowerCase().trim()) ? 'correct' : 'incorrect'}`}>
-            {selectedAnswer.toLowerCase().trim() === currentCard.correctAnswer?.toLowerCase().trim() || selectedAnswer.toLowerCase().includes(currentCard.answer?.toLowerCase().trim()) ? '✓ Correct!' : '✗ Incorrect'}
+          <div className={`result-indicator ${userAnswers[userAnswers.length - 1]?.isCorrect ? 'correct' : 'incorrect'}`}>
+            {userAnswers[userAnswers.length - 1]?.isCorrect ? '✓ Correct!' : '✗ Incorrect'}
           </div>
           
           <div className="correct-answer-display">
             <strong>Correct Answer:</strong> {currentCard.answer}
           </div>
           
-          {selectedAnswer.toLowerCase().trim() !== currentCard.correctAnswer?.toLowerCase().trim() && !selectedAnswer.toLowerCase().includes(currentCard.answer?.toLowerCase().trim()) && (
+          {!userAnswers[userAnswers.length - 1]?.isCorrect && (
             <div className="your-answer-display">
               <strong>Your Answer:</strong> {selectedAnswer}
             </div>
