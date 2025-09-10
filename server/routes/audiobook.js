@@ -240,13 +240,17 @@ ${pageData.content}`;
           temperature: 0.7
         });
 
+        console.log(`🐛 Generated summary length: ${summary?.length || 0}, content preview: ${summary?.substring(0, 100)}...`);
+
         // Store summary for each page in the group
         if (pageData.isGroup) {
           for (let k = pageData.index; k <= pageData.endIndex; k++) {
             summaries[k] = summary;
+            console.log(`🐛 Stored summary for page ${k}: ${summaries[k]?.substring(0, 50)}...`);
           }
         } else {
           summaries[pageData.index] = summary;
+          console.log(`🐛 Stored summary for page ${pageData.index}: ${summaries[pageData.index]?.substring(0, 50)}...`);
         }
         
         console.log(`✅ ${pageLabel.charAt(0).toUpperCase() + pageLabel.slice(1)} summarized`);
@@ -404,37 +408,22 @@ ${pages.join('\n\n')}`;
 
     console.log('🎉 AUDIOBOOK COMPLETE!');
 
-    // Generate flashcards if enabled
+    // Generate flashcards from original text content if enabled
     let flashcards = [];
     if (generateFlashcards) {
       try {
-        jobStatus[jobId].progress = 'Generating flashcards...';
-        console.log('🎯 Generating flashcards from content...');
+        jobStatus[jobId].progress = 'Generating flashcards from text content...';
+        console.log('🎯 Generating flashcards directly from original text content...');
         
-        // Combine all page summaries for flashcard generation (excluding fullDocument)
-        const pageSummaries = [];
-        for (let i = 0; i < pages.length; i++) {
-          if (summaries[i] && summaries[i] !== 'No summary generated for this page.') {
-            pageSummaries.push(summaries[i]);
-          }
-        }
-        const contentForFlashcards = pageSummaries.join('\n\n');
+        // Use the actual page content for flashcard generation (much better quality)
+        const textForFlashcards = pages.join('\n\n--- PAGE BREAK ---\n\n');
         
-        console.log(`📊 Flashcard debug: Found ${pageSummaries.length} page summaries, total content length: ${contentForFlashcards.length}`);
-        console.log('📊 Available summaries keys:', Object.keys(summaries));
+        console.log(`📊 Flashcard generation: Using ${pages.length} pages, total content length: ${textForFlashcards.length}`);
         
-        if (contentForFlashcards.length > 0) {
-          console.log('🎯 Starting flashcard generation with content...');
-          flashcards = await aiService.generateFlashcards(contentForFlashcards, 15);
-          console.log(`✅ Generated ${flashcards.length} flashcards`);
-        } else {
-          console.log('❌ No content available for flashcard generation - using all summaries as fallback');
-          // Fallback: use all summaries including fullDocument
-          const allContent = Object.values(summaries).filter(s => s && s.length > 0).join('\n\n');
-          if (allContent.length > 0) {
-            flashcards = await aiService.generateFlashcards(allContent, 15);
-            console.log(`✅ Generated ${flashcards.length} flashcards from fallback content`);
-          }
+        if (textForFlashcards.length > 0) {
+          console.log('🎯 Starting flashcard generation with original text...');
+          flashcards = await aiService.generateFlashcards(textForFlashcards, 15);
+          console.log(`✅ Generated ${flashcards.length} flashcards from original text`);
         }
       } catch (error) {
         console.error('❌ Error generating flashcards:', error.message);

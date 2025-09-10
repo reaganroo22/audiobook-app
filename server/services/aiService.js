@@ -197,20 +197,37 @@ class AIService {
 
   // Generate flashcards from content using GPT-5-mini
   async generateFlashcards(content, count = 10) {
-    const prompt = `Generate ${count} high-quality flashcards from this content. Create challenging but fair questions that test understanding, not just memorization. Format as JSON array with "question" and "answer" fields. No markdown formatting:
+    const prompt = `Generate exactly ${count} high-quality flashcards from this content. Create challenging but fair questions that test comprehension, analysis, and key concepts.
 
-Content: ${content}`;
+IMPORTANT: Respond with ONLY a valid JSON array. No explanations, no markdown, no text before or after. Just the JSON array.
+
+Format: [{"question": "What is...", "answer": "The answer is..."}, {"question": "How does...", "answer": "It works by..."}]
+
+Content to analyze:
+${content.substring(0, 8000)}`; // Limit content to avoid token limits
 
     try {
       const response = await this.openai.chat.completions.create({
         model: 'gpt-5-mini',
         messages: [{ role: 'user', content: prompt }],
-        max_completion_tokens: 2000, // GPT-5-mini uses max_completion_tokens
-        // temperature: 0.3, // GPT-5-mini only supports default temperature (1)
-        reasoning_effort: 'low' // Use low reasoning for faster flashcard generation
+        max_completion_tokens: 2000,
+        reasoning_effort: 'low'
       });
 
-      return JSON.parse(response.choices[0].message.content);
+      let responseText = response.choices[0].message.content.trim();
+      
+      // Clean up the response to ensure it's valid JSON
+      if (responseText.startsWith('```json')) {
+        responseText = responseText.replace(/```json\n?/, '').replace(/\n?```$/, '');
+      }
+      if (responseText.startsWith('```')) {
+        responseText = responseText.replace(/```\n?/, '').replace(/\n?```$/, '');
+      }
+      
+      console.log(`🎯 Flashcard response preview: ${responseText.substring(0, 200)}...`);
+      
+      const flashcards = JSON.parse(responseText);
+      return Array.isArray(flashcards) ? flashcards : [];
       
     } catch (error) {
       console.error('GPT-5-mini flashcard error:', error.message);
@@ -221,11 +238,22 @@ Content: ${content}`;
         const fallbackResponse = await this.openai.chat.completions.create({
           model: 'gpt-4',
           messages: [{ role: 'user', content: prompt }],
-          max_tokens: 2000, // GPT-4 uses max_tokens
+          max_tokens: 2000,
           temperature: 0.3
         });
         
-        return JSON.parse(fallbackResponse.choices[0].message.content);
+        let fallbackText = fallbackResponse.choices[0].message.content.trim();
+        
+        // Clean up the fallback response
+        if (fallbackText.startsWith('```json')) {
+          fallbackText = fallbackText.replace(/```json\n?/, '').replace(/\n?```$/, '');
+        }
+        if (fallbackText.startsWith('```')) {
+          fallbackText = fallbackText.replace(/```\n?/, '').replace(/\n?```$/, '');
+        }
+        
+        const fallbackFlashcards = JSON.parse(fallbackText);
+        return Array.isArray(fallbackFlashcards) ? fallbackFlashcards : [];
       } catch (fallbackError) {
         console.error('Error generating flashcards with fallback:', fallbackError);
         return [];
