@@ -160,23 +160,23 @@ class AIService {
     try {
       console.log(`🔥 EMERGENCY DEBUG - GPT-5-mini request:`, {
         model: 'gpt-5-mini',
-        maxTokens,
+        maxTokens: maxTokens * 2,
         promptLength: prompt.length,
         promptPreview: prompt.substring(0, 200)
       });
       
       const response = await this.openai.chat.completions.create({
-        model: 'gpt-5-mini', // Using GPT-5-mini for optimal cost/performance balance
+        model: 'gpt-5-mini', // Using GPT-5-mini for optimal performance
         messages: [{ role: 'user', content: prompt }],
-        max_completion_tokens: maxTokens, // GPT-5-mini uses max_completion_tokens instead of max_tokens
-        // temperature: temperature, // GPT-5-mini only supports default temperature (1)
-        reasoning_effort: 'medium' // minimal, low, medium, high
+        max_completion_tokens: maxTokens * 2, // GPT-5-mini needs more tokens for reasoning + output
+        reasoning_effort: 'low' // Use low reasoning effort for faster, simpler tasks
       });
       
       console.log(`🔥 EMERGENCY DEBUG - GPT-5-mini response:`, {
         content: response.choices[0]?.message?.content,
         finishReason: response.choices[0]?.finish_reason,
-        usage: response.usage
+        usage: response.usage,
+        contentLength: response.choices[0]?.message?.content?.length || 0
       });
       
       // Clean markdown formatting from response
@@ -190,12 +190,12 @@ class AIService {
     } catch (error) {
       console.error('GPT-5-mini error:', error.message);
       
-      // Fallback to GPT-4 if GPT-5-mini fails
-      console.log('🔄 Falling back to GPT-4...');
+      // Fallback to GPT-4o-mini if GPT-5-mini fails
+      console.log('🔄 Falling back to GPT-4o-mini...');
       const fallbackResponse = await this.openai.chat.completions.create({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [{ role: 'user', content: prompt }],
-        max_tokens: maxTokens, // GPT-4 uses max_tokens
+        max_tokens: maxTokens,
         temperature: temperature
       });
       
@@ -228,8 +228,8 @@ ${content.substring(0, 8000)}`; // Limit content to avoid token limits
       const response = await this.openai.chat.completions.create({
         model: 'gpt-5-mini',
         messages: [{ role: 'user', content: prompt }],
-        max_completion_tokens: 3000, // Increased for flashcard generation
-        reasoning_effort: 'low'
+        max_completion_tokens: 4000, // Increased for flashcard generation + reasoning
+        reasoning_effort: 'low' // Low reasoning for faster performance
       });
 
       let responseText = response.choices[0].message.content.trim();
