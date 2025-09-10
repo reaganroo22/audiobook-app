@@ -116,7 +116,7 @@ async function processAudiobook(filename, jobId, summaryConfig = {
   startPage: 1,
   endPage: null,
   premiumAudio: false,
-  generateFlashcards: false
+  generateFlashcards: true
 }) {
   try {
     jobStatus[jobId].progress = 'Validating file...';

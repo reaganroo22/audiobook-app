@@ -5,18 +5,52 @@ const Flashcards = ({ flashcards = [] }) => {
   const [currentCard, setCurrentCard] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [studyMode, setStudyMode] = useState('normal'); // 'normal', 'shuffle', 'difficult'
+  const [masteredCards, setMasteredCards] = useState(new Set());
+  const [shuffledOrder, setShuffledOrder] = useState([]);
 
   if (!flashcards.length) {
     return <div className="flashcards-empty">No flashcards generated</div>;
   }
 
+  const getActiveOrder = () => {
+    if (studyMode === 'shuffle' && shuffledOrder.length === 0) {
+      const shuffled = [...Array(flashcards.length).keys()].sort(() => Math.random() - 0.5);
+      setShuffledOrder(shuffled);
+      return shuffled;
+    }
+    return studyMode === 'shuffle' ? shuffledOrder : [...Array(flashcards.length).keys()];
+  };
+
   const nextCard = () => {
-    setCurrentCard((prev) => (prev + 1) % flashcards.length);
+    const order = getActiveOrder();
+    const currentIndex = order.indexOf(currentCard);
+    const nextIndex = (currentIndex + 1) % order.length;
+    setCurrentCard(order[nextIndex]);
     setIsFlipped(false);
   };
 
   const prevCard = () => {
-    setCurrentCard((prev) => (prev - 1 + flashcards.length) % flashcards.length);
+    const order = getActiveOrder();
+    const currentIndex = order.indexOf(currentCard);
+    const prevIndex = (currentIndex - 1 + order.length) % order.length;
+    setCurrentCard(order[prevIndex]);
+    setIsFlipped(false);
+  };
+
+  const markAsMastered = () => {
+    const newMastered = new Set(masteredCards);
+    if (masteredCards.has(currentCard)) {
+      newMastered.delete(currentCard);
+    } else {
+      newMastered.add(currentCard);
+    }
+    setMasteredCards(newMastered);
+  };
+
+  const resetProgress = () => {
+    setMasteredCards(new Set());
+    setCurrentCard(0);
     setIsFlipped(false);
   };
 
@@ -49,10 +83,27 @@ const Flashcards = ({ flashcards = [] }) => {
   return (
     <div className="flashcards-container">
       <div className="flashcards-header">
-        <h3>Flashcards ({currentCard + 1} of {flashcards.length})</h3>
-        <button onClick={() => setShowAll(true)} className="view-all-btn">
-          View All
-        </button>
+        <h3>Flashcards ({getActiveOrder().indexOf(currentCard) + 1} of {flashcards.length})</h3>
+        <div className="flashcard-controls-top">
+          <select 
+            value={studyMode} 
+            onChange={(e) => {
+              setStudyMode(e.target.value);
+              if (e.target.value === 'shuffle') {
+                setShuffledOrder([...Array(flashcards.length).keys()].sort(() => Math.random() - 0.5));
+              }
+              setCurrentCard(0);
+              setIsFlipped(false);
+            }}
+            className="study-mode-select"
+          >
+            <option value="normal">Normal Order</option>
+            <option value="shuffle">Shuffle</option>
+          </select>
+          <button onClick={() => setShowAll(true)} className="view-all-btn">
+            View All
+          </button>
+        </div>
       </div>
       
       <div className="flashcard-wrapper">
@@ -86,6 +137,25 @@ const Flashcards = ({ flashcards = [] }) => {
         <button onClick={nextCard} disabled={flashcards.length <= 1}>
           Next →
         </button>
+      </div>
+      
+      <div className="flashcard-actions">
+        <button 
+          onClick={markAsMastered}
+          className={`mastery-btn ${masteredCards.has(currentCard) ? 'mastered' : ''}`}
+        >
+          {masteredCards.has(currentCard) ? '★ Mastered' : '☆ Mark as Mastered'}
+        </button>
+        {masteredCards.size > 0 && (
+          <div className="progress-indicator">
+            Mastered: {masteredCards.size}/{flashcards.length}
+          </div>
+        )}
+        {masteredCards.size > 0 && (
+          <button onClick={resetProgress} className="reset-btn">
+            Reset Progress
+          </button>
+        )}
       </div>
     </div>
   );
