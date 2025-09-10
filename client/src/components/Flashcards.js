@@ -107,7 +107,10 @@ const Flashcards = ({ flashcards = [] }) => {
       </div>
       
       <div className="flashcard-wrapper">
-        <div className={`flashcard ${isFlipped ? 'flipped' : ''}`}>
+        <div 
+          className={`flashcard ${isFlipped ? 'flipped' : ''}`}
+          onClick={() => setIsFlipped(!isFlipped)}
+        >
           <div className="flashcard-front">
             <div className="card-type">Question</div>
             <div className="card-content">
