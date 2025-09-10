@@ -162,7 +162,7 @@ class AIService {
         model: 'gpt-5-mini', // Using GPT-5-mini for optimal cost/performance balance
         messages: [{ role: 'user', content: prompt }],
         max_completion_tokens: maxTokens, // GPT-5-mini uses max_completion_tokens instead of max_tokens
-        temperature: temperature,
+        // temperature: temperature, // GPT-5-mini only supports default temperature (1)
         reasoning_effort: 'medium' // minimal, low, medium, high
       });
       
@@ -206,7 +206,7 @@ Content: ${content}`;
         model: 'gpt-5-mini',
         messages: [{ role: 'user', content: prompt }],
         max_completion_tokens: 2000, // GPT-5-mini uses max_completion_tokens
-        temperature: 0.3,
+        // temperature: 0.3, // GPT-5-mini only supports default temperature (1)
         reasoning_effort: 'low' // Use low reasoning for faster flashcard generation
       });
 

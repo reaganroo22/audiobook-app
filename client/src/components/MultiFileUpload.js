@@ -11,7 +11,12 @@ const MultiFileUpload = ({ onFilesUpload }) => {
     enablePageSummaries: true,
     pageInterval: 1,
     enableFullSummary: true,
-    summaryStyle: 'intelligent'
+    summaryStyle: 'intelligent',
+    pageRange: 'all',
+    startPage: 1,
+    endPage: 10,
+    premiumAudio: false,
+    generateFlashcards: true
   });
 
   const handleDragOver = (e) => {
