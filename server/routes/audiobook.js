@@ -162,15 +162,7 @@ async function processAudiobook(filename, jobId, summaryConfig = {
       }
     }
     
-    // Apply page range filtering if specified
-    if (pageRange === 'custom' && startPage && endPage) {
-      const startIndex = Math.max(0, startPage - 1);
-      const endIndex = Math.min(pages.length - 1, endPage - 1);
-      pages = pages.slice(startIndex, endIndex + 1);
-      console.log(`📄 Page range applied: pages ${startPage}-${endPage} (${pages.length} pages selected)`);
-    }
-    
-    // Extract config values before using them
+    // Extract config values BEFORE using them
     const {
       enablePageSummaries = true,
       pageInterval = 1,
@@ -182,6 +174,14 @@ async function processAudiobook(filename, jobId, summaryConfig = {
       premiumAudio = false,
       generateFlashcards = false
     } = summaryConfig;
+    
+    // Apply page range filtering if specified
+    if (pageRange === 'custom' && startPage && endPage) {
+      const startIndex = Math.max(0, startPage - 1);
+      const endIndex = Math.min(pages.length - 1, endPage - 1);
+      pages = pages.slice(startIndex, endIndex + 1);
+      console.log(`📄 Page range applied: pages ${startPage}-${endPage} (${pages.length} pages selected)`);
+    }
     
     console.log(`✅ PARSED: ${pages.length} pages`);
     jobStatus[jobId].progress = `Parsed ${pages.length} pages successfully`;
