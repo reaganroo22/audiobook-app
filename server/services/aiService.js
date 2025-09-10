@@ -248,17 +248,32 @@ Content: ${content}`;
     
     console.log(`🎵 OpenAI TTS: Generating audio with voice "${openaiVoice}"`);
     
-    // Use GPT-4o-mini TTS for premium audio, standard tts-1-hd for regular  
-    const ttsModel = premium ? 'gpt-4o-audio-preview' : (process.env.OPENAI_TTS_MODEL || 'tts-1-hd');
+    console.log(`🎵 Using ${premium ? 'Premium GPT-4o-mini-tts' : 'Standard OpenAI TTS'}`);
     
-    console.log(`🎵 Using ${premium ? 'Premium GPT-4o-mini' : 'Standard'} TTS model: ${ttsModel}`);
-    
-    const response = await this.openai.audio.speech.create({
-      model: ttsModel,
-      voice: openaiVoice,
-      input: text.substring(0, 4000), // OpenAI has 4000 char limit
-      response_format: format
-    });
+    let response;
+    if (premium) {
+      // Use GPT-4o Mini TTS API with its specific parameters
+      console.log(`🎵 GPT-4o-mini-tts: voice_style="${openaiVoice}", format="${format}"`);
+      response = await this.openai.audio.speech.create({
+        model: "gpt-4o-mini-tts",
+        input: text.substring(0, 2000), // GPT-4o-mini-tts has 2000 token limit
+        language: "en",
+        voice_style: "friendly assistant",
+        output_format: format,
+        speed: 1.0,
+        voice_instructions: `Use a ${openaiVoice} style voice with clear, natural pronunciation.`
+      });
+    } else {
+      // Use standard OpenAI TTS
+      const ttsModel = process.env.OPENAI_TTS_MODEL || 'tts-1';
+      console.log(`🎵 Standard TTS model: ${ttsModel}, voice: ${openaiVoice}`);
+      response = await this.openai.audio.speech.create({
+        model: ttsModel,
+        voice: openaiVoice,
+        input: text.substring(0, 4000), // OpenAI standard TTS has 4000 char limit
+        response_format: format
+      });
+    }
 
     return Buffer.from(await response.arrayBuffer());
   }

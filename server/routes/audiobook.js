@@ -307,7 +307,9 @@ ${pages.join('\n\n')}`;
 
     // Fill any missing page summaries with placeholder
     for (let i = 0; i < pages.length; i++) {
+      console.log(`🐛 Checking summary ${i}: exists=${!!summaries[i]}, value=${summaries[i]?.substring(0, 50)}...`);
       if (!summaries[i]) {
+        console.log(`🔧 Setting placeholder for page ${i}`);
         summaries[i] = 'No summary generated for this page.';
       }
     }
