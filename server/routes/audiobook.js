@@ -313,6 +313,8 @@ ${pages.join('\n\n')}`;
     }
     
     console.log(`✅ SUMMARIES: ${Object.keys(summaries).length} generated`);
+    console.log('📊 Summary debug - keys:', Object.keys(summaries));
+    console.log('📊 Summary debug - sample content:', Object.keys(summaries).slice(0, 2).map(key => `${key}: ${summaries[key]?.substring(0, 100)}...`));
 
     // STEP 3: Create Master Audio Script
     console.log('🎬 STEP 3: Creating master audio script...');
@@ -416,9 +418,21 @@ ${pages.join('\n\n')}`;
         }
         const contentForFlashcards = pageSummaries.join('\n\n');
         
+        console.log(`📊 Flashcard debug: Found ${pageSummaries.length} page summaries, total content length: ${contentForFlashcards.length}`);
+        console.log('📊 Available summaries keys:', Object.keys(summaries));
+        
         if (contentForFlashcards.length > 0) {
+          console.log('🎯 Starting flashcard generation with content...');
           flashcards = await aiService.generateFlashcards(contentForFlashcards, 15);
           console.log(`✅ Generated ${flashcards.length} flashcards`);
+        } else {
+          console.log('❌ No content available for flashcard generation - using all summaries as fallback');
+          // Fallback: use all summaries including fullDocument
+          const allContent = Object.values(summaries).filter(s => s && s.length > 0).join('\n\n');
+          if (allContent.length > 0) {
+            flashcards = await aiService.generateFlashcards(allContent, 15);
+            console.log(`✅ Generated ${flashcards.length} flashcards from fallback content`);
+          }
         }
       } catch (error) {
         console.error('❌ Error generating flashcards:', error.message);
