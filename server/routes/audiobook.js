@@ -430,6 +430,7 @@ ${pages.join('\n\n')}`;
       content: page,
       summary: summaries[index]
     }));
+    jobStatus[jobId].fullDocumentSummary = summaries.fullDocument || null;
     jobStatus[jobId].flashcards = flashcards;
     jobStatus[jobId].duration = Math.floor(combinedBuffer.length / 16000); // Estimate duration
 

@@ -383,9 +383,21 @@ const Dashboard = ({ onCreateNew, audiobooks = [], onUpdateAudiobook, isGeorgeto
                       </div>
                     </div>
 
+                    {/* Full Document Summary */}
+                    {selectedAudiobook.fullDocumentSummary && (
+                      <div className="detail-section">
+                        <h3>Full Document Summary</h3>
+                        <div className="full-summary">
+                          <div className="summary-content">
+                            {selectedAudiobook.fullDocumentSummary}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     {selectedAudiobook.pages && selectedAudiobook.pages.length > 0 ? (
                       <div className="detail-section">
-                        <h3>Content</h3>
+                        <h3>Page-by-Page Content</h3>
                         <div className="pages-list">
                           {selectedAudiobook.pages.map((page, index) => (
                             <PagePreview 

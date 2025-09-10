@@ -8,7 +8,12 @@ const AudiobookCreator = ({ files, summaryConfig = {
   enablePageSummaries: true,
   pageInterval: 1,
   enableFullSummary: true,
-  summaryStyle: 'intelligent'
+  summaryStyle: 'intelligent',
+  pageRange: 'all',
+  startPage: 1,
+  endPage: 10,
+  premiumAudio: false,
+  generateFlashcards: true
 }, onComplete, onGoToDashboard }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [progress, setProgress] = useState('');
@@ -83,7 +88,9 @@ const AudiobookCreator = ({ files, summaryConfig = {
           summariesGenerated: status.summariesGenerated || 1,
           duration: status.duration || 300,
           audioUrl: status.audioUrl,
-          pages: status.pages || []
+          pages: status.pages || [],
+          fullDocumentSummary: status.fullDocumentSummary || null,
+          flashcards: status.flashcards || []
         };
         
         // Call parent callback if provided
