@@ -242,7 +242,7 @@ const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
               <span className="option-title">Premium Audio</span>
             </label>
             <p className="option-description">
-              Use high-quality OpenAI TTS instead of standard audio
+              Use high-quality GPT-4o-mini TTS instead of standard Deepgram audio
             </p>
           </div>
         </div>
