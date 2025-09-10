@@ -158,12 +158,25 @@ class AIService {
   // OpenAI Implementation
   async generateSummaryOpenAI(prompt, maxTokens, temperature) {
     try {
+      console.log(`🔥 EMERGENCY DEBUG - GPT-5-mini request:`, {
+        model: 'gpt-5-mini',
+        maxTokens,
+        promptLength: prompt.length,
+        promptPreview: prompt.substring(0, 200)
+      });
+      
       const response = await this.openai.chat.completions.create({
         model: 'gpt-5-mini', // Using GPT-5-mini for optimal cost/performance balance
         messages: [{ role: 'user', content: prompt }],
         max_completion_tokens: maxTokens, // GPT-5-mini uses max_completion_tokens instead of max_tokens
         // temperature: temperature, // GPT-5-mini only supports default temperature (1)
         reasoning_effort: 'medium' // minimal, low, medium, high
+      });
+      
+      console.log(`🔥 EMERGENCY DEBUG - GPT-5-mini response:`, {
+        content: response.choices[0]?.message?.content,
+        finishReason: response.choices[0]?.finish_reason,
+        usage: response.usage
       });
       
       // Clean markdown formatting from response

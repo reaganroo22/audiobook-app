@@ -9,13 +9,22 @@ const SummaryConfig = ({ config, onChange, totalPages = 1 }) => {
     summaryStyle: 'intelligent', // 'intelligent', 'brief', 'detailed'
     pageRange: 'all', // 'all' or 'custom'
     startPage: 1,
-    endPage: Math.max(totalPages, 10),
+    endPage: totalPages || 10,
     premiumAudio: false,
     generateFlashcards: true,
     flashcardCount: 'auto', // 'auto' or number
     customFlashcardCount: 15,
     ...config
   });
+
+  // Update endPage when totalPages changes
+  React.useEffect(() => {
+    if (totalPages && totalPages !== localConfig.endPage && localConfig.pageRange === 'custom') {
+      const newConfig = { ...localConfig, endPage: totalPages };
+      setLocalConfig(newConfig);
+      onChange(newConfig);
+    }
+  }, [totalPages]);
 
   // Generate intelligent interval options based on page count
   const getIntervalOptions = () => {
